@@ -24,13 +24,15 @@ inline constexpr uint32_t POS_FREQ = 1; //KHZ = every 1 ms
 using FlexCAN = FlexCAN_T4<CAN1, RX_SIZE_256, TX_SIZE_16>;
 
 namespace motor_control{
+    
     void stop (FlexCAN can, uint32_t device);
     void vel (FlexCAN can, uint32_t device, int32_t rpm);
     void pos_inc (FlexCAN can, uint32_t device, int32_t deg, int32_t rpm);
     void pos_abs (FlexCAN can, uint32_t device, int32_t deg, int32_t rpm);
+    void get_pos_abs(FlexCAN can, uint32_t device);
+
     void system_reset(FlexCAN can, uint32_t device);
     void zero_encoder (FlexCAN can, uint32_t device);
-    void get_pos_abs(FlexCAN can, uint32_t device);
 
 
 
