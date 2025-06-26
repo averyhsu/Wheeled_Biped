@@ -71,6 +71,16 @@ namespace motor_control{
     //0xA2: Velocity control using RPM (round per minute)
     void vel (FlexCAN can, uint32_t device, int32_t rpm){
         
+        // //1.Set throttle
+        // static uint32_t lastMicros = 0;
+        // uint32_t now = micros();  
+        // if (now - lastMicros < POS_FREQ) {
+        //     // too soon — just exit, no blocking, no CAN write
+        //     return;
+        // }
+        // lastMicros = now;                // stamp the send-time
+
+
         CAN_message_t msg;
        
         // Define the message
@@ -143,7 +153,7 @@ namespace motor_control{
             if (can.read(msg)){
                 Serial.println("Received message");
 
-                if(msg.id ==parsing::id_assignment(device)&& msg.buf[0]==0x64){
+                if((msg.id ==0x240+device)&& msg.buf[0]==0x64){
                     Serial.println("ZEROED");
 
                     //read 4-8 bytes daug
@@ -159,7 +169,7 @@ namespace motor_control{
                 }
             }
             else{
-                //Serial.println("not receiving message");
+                // Serial.println("not receiving message");
 
             }
         }
@@ -190,7 +200,7 @@ namespace motor_control{
             if (can.read(msg)){
                 Serial.println("Received message");
 
-                if(msg.id ==parsing::id_assignment(device)&&msg.buf[0]==0x92){
+                if((msg.id ==0x240+device)&&msg.buf[0]==0x92){
                     Serial.println("GOT POS");
 
                     //read 4-8 bytes daug
@@ -215,7 +225,16 @@ namespace motor_control{
     //0xA8: Incremental position control  ('deg' unit is 0.01 degree)
     void pos_inc (FlexCAN can, uint32_t device, int32_t deg, int32_t rpm){
         assert(rpm<=MAX_SPEED&&rpm>=(-MAX_SPEED)&&rpm!=0);
+        // //1.Set throttle
+        // static uint32_t lastMicros = 0;
+        // uint32_t now = micros();  
+        // if (now - lastMicros < POS_FREQ) {
+        // // too soon — just exit, no blocking, no CAN write
+        // return;
+        // }
+        // lastMicros = now;                // stamp the send-time
 
+        //2.Build msg
         CAN_message_t msg;
         msg.id = parsing::id_assignment(device);
         msg.len = 8; 
@@ -245,6 +264,15 @@ namespace motor_control{
     void pos_abs (FlexCAN can, uint32_t device, int32_t deg, int32_t rpm){
          assert(rpm<=MAX_SPEED&&rpm>=(-MAX_SPEED)&&rpm!=0);
 
+        //  //1.Set throttle
+        // static uint32_t lastMicros = 0;
+        // uint32_t now = micros();  
+        // if (now - lastMicros < POS_FREQ) {
+        // // too soon — just exit, no blocking, no CAN write
+        //     return;
+        // }
+        // lastMicros = now;                // stamp the send-time
+
         CAN_message_t msg;
         msg.id = parsing::id_assignment(device);
         msg.len = 8; 
@@ -263,7 +291,7 @@ namespace motor_control{
         }
         
         if (can.write(msg)) {
-            Serial.println("Absolute position command");
+            // Serial.println("Absolute position command");
         }
         else {
             Serial.println("Error absolute postion message");

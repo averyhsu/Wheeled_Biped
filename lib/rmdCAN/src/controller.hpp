@@ -2,6 +2,7 @@
 //2. parse number in eight 8 bytes array
 #pragma once
 #define DEBUG
+#include <Arduino.h>
 #include <FlexCAN_T4.h>
 #include <array>
 #include <cassert> //cpp assertion library
@@ -13,9 +14,9 @@ inline constexpr int MIN_SPEED = -805;
 inline constexpr uint32_t CMD_PERIOD_US = 1000;   // 1 kHz  (1000 µs)
 inline constexpr uint32_t ALL = 0;
 //Control loop frequencies
-inline constexpr uint32_t TORQUE_FREQ = 15 ;//KHZ every 0.066 ms
-inline constexpr uint32_t SPEED_FREQ = 5; //KHZ every 0.2 ms
-inline constexpr uint32_t POS_FREQ = 1; //KHZ = every 1 ms
+inline constexpr uint32_t TORQUE_FREQ = 70 ;//70 microseconds: 15KHZ every 0.066 ms =~ 70 microseconds
+inline constexpr uint32_t SPEED_FREQ = 200; //200 microseconds: 5KHZ every 0.2 ms = 200 microseconds
+inline constexpr uint32_t POS_FREQ = 1000; //1000 microseconds: 1KHZ = every 1 ms =1000 microseconds
 
 
 
