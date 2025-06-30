@@ -1,7 +1,6 @@
 //1. convert RPM to DPS
 //2. parse number in eight 8 bytes array
 #pragma once
-#define DEBUG
 #include <Arduino.h>
 #include <FlexCAN_T4.h>
 #include <array>
@@ -9,6 +8,7 @@
 #include <iostream>
 #include <iomanip>   
 #include <string>
+inline constexpr int DEVICE_NUM = 3;
 inline constexpr int MAX_SPEED = 805;
 inline constexpr int MIN_SPEED = -805;
 inline constexpr uint32_t CMD_PERIOD_US = 1000;   // 1 kHz  (1000 µs)
@@ -24,6 +24,9 @@ inline constexpr uint32_t POS_FREQ = 1000; //1000 microseconds: 1KHZ = every 1 m
 
 using FlexCAN =  FlexCAN_T4<CAN1, RX_SIZE_256, TX_SIZE_16>&; //reference value to create adiitional copies
 
+namespace motor_system{
+    void change_pid(FlexCAN can);
+}
 namespace motor_control{
     
     void stop (FlexCAN can, uint32_t device);
@@ -34,9 +37,6 @@ namespace motor_control{
 
     void system_reset(FlexCAN can, uint32_t device);
     void zero_encoder (FlexCAN can, uint32_t device);
-
-
-
 
 }
 

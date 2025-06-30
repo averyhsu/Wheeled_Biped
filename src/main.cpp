@@ -17,6 +17,7 @@ void setup() {
     can1.setBaudRate(1000000); // Set baud rate to 1Mbps(motor requirement)
 
     Serial.println("CAN bus initialized.");
+    // motor_system::change_pid(can1);
     motor_control::zero_encoder(can1, 1);
     motor_control::get_pos_abs(can1, 1);
 
