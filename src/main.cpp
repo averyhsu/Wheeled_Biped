@@ -1,3 +1,4 @@
+#define DEBUG
 #include <FlexCAN_T4.h>
 #include "controller.hpp"
 #include "trajectory.hpp"
@@ -36,7 +37,9 @@ void loop() {
 
     // motor_control::pos_abs(can1, 1, -360000, MAX_SPEED);
     // delay(5000);
-
+    #ifdef DEBUG
+        Serial.println("Main Debug");
+    #endif
     rotate(can1, 1);
     delay(5000);
     motor_control::get_pos_abs(can1, 1);

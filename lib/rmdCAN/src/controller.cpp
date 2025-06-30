@@ -132,6 +132,9 @@ namespace motor_control{
     //  Waits for reply
     void zero_encoder (FlexCAN can, uint32_t device){
         CAN_message_t msg;
+        #ifdef DEBUG
+            Serial.println("Debug controller.cpp");
+        #endif 
        
         // Define the message
         msg.id = parsing::id_assignment(device);
