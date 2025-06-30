@@ -6,7 +6,6 @@ FlexCAN_T4<CAN1, RX_SIZE_256, TX_SIZE_16> can1;
 
 
 
-
 void setup() {
     Serial.begin(115200);
     while (!Serial);

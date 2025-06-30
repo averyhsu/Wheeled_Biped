@@ -22,7 +22,7 @@ inline constexpr uint32_t POS_FREQ = 1000; //1000 microseconds: 1KHZ = every 1 m
 
 
 
-using FlexCAN = FlexCAN_T4<CAN1, RX_SIZE_256, TX_SIZE_16>;
+using FlexCAN =  FlexCAN_T4<CAN1, RX_SIZE_256, TX_SIZE_16>&; //reference value to create adiitional copies
 
 namespace motor_control{
     
