@@ -2,33 +2,7 @@
 
 namespace parsing{
 
-    enum Pid{
-        invalid,
-
-        kp_torque,
-        ki_torque,
-
-        kp_vel,
-        ki_vel,
-
-        kp_pos,
-        ki_pos,
-        kd_pos,
-    };
-    // struct PID{
-    //     int kp_torque;
-    //     int ki_torque;
-    //     int kp_vel;
-    //     int ki_vel;
-    //     int kp_pos;
-    //     int ki_pos;
-    //     int kd_pos;
-    // };  
-    struct PIDInfo{
-        int device_id;
-        Pid pid;
-        int target_value; 
-    };
+    
 
     //parser() takes in an int32_t and converts it into 4 byte hexa decimal from LSB to MSB (small to big)
     auto int_to_array(int32_t data) -> std::array<uint8_t, 4>{
@@ -73,20 +47,29 @@ namespace parsing{
         }
     }
 
-    auto read_pid_change_target() -> PIDInfo {
+    auto read_pid_change_target(FlexCAN can) -> PIDInfo {
+        Serial.setTimeout(5000);
+
         PIDInfo pid_info={};
-        while(true){        
-            if (Serial.available()) {
-                Serial.println("Please make changes to PID gains");
-                Serial.print("Enter Target Device ID (0-");
-                Serial.print(DEVICE_NUM);
-                Serial.println("): ");
-                int device = Serial.parseInt();
-                if (device < 0 || device > DEVICE_NUM) {
-                    Serial.println("Invalid device ID");
-                    continue;
-                }
+            while(true){        
+                
+                    Serial.println("Please make changes to PID gains");
+                    Serial.print("Enter Target Device ID (0-");
+                    Serial.print(DEVICE_NUM);
+                    Serial.print("): ");
+                    int device = Serial.parseInt();
+                    if (device < 0 || device > DEVICE_NUM) {
+                        Serial.println("Invalid device ID");
+                        continue;
+                    }
+                    Serial.println(device);
+                    pid_info.device_id = device;                 
+                    break;
+                
+            }
+            while(true){
                 // Input PID to change
+                Serial.println("");
                 Serial.print("Enter Target PID (0-");
                 Serial.print(static_cast<int>(Pid::kd_pos));
                 Serial.println("): ");
@@ -102,15 +85,28 @@ namespace parsing{
                     Serial.println("Invalid PID");
                     continue;
                 }
-                pid_info.device_id = device;
+                Serial.println(pid);
                 pid_info.pid = static_cast<Pid>(pid);
+                break;
 
-                Serial.println("Enter New PID value:");
-                pid_info.target_value = Serial.parseInt();
+            }
+            int current_value = motor_system::read_pid(can, pid_info.device_id, pid_info.pid);
+            Serial.print("Current PID value is: ");
+            Serial.println(current_value);
+            
 
+            while (true){
+                Serial.print("Enter New PID value:");
+                int target = Serial.parseInt();
+                if (target <= 0){
+                    Serial.println("Invalid PID value");
+                    continue;
+                }
+                Serial.println(target);
+                pid_info.target_value = target;
                 break;
             }
-        }
+        
         return pid_info;
 
     }
@@ -140,16 +136,21 @@ namespace motor_system{
 
          while (true){
             if (can.read(msg)){
+                #ifdef DEBUG
                 Serial.println("Received message");
+                #endif
 
-                if((msg.id ==0x240+device)&& msg.buf[0]==msg_hex){
+                if(/*(msg.id ==0x240+device)&&*/ msg.buf[0]==msg_hex){
 
                     //read 4-8 bytes 
                     std::array<uint8_t,4> data = {};
                     for(int i = 0; i<4;i++){
                         data[i]=msg.buf[i+4]; //plus 4 for where the data field starts
                     }
-                    return parsing::array_to_int(data);
+                    int ret = parsing::array_to_int(data);
+                    Serial.print("PID value is: ");
+                    Serial.println(ret);
+                    return ret;
                 }
             }
             else{
@@ -161,7 +162,7 @@ namespace motor_system{
 
     void change_pid(FlexCAN can){
         //Read PID 
-        parsing::PIDInfo pid_info = parsing::read_pid_change_target();
+        parsing::PIDInfo pid_info = parsing::read_pid_change_target(can);
         if(pid_info.device_id == 0){
             Serial.println("Change PID for all devices");
         }
@@ -169,9 +170,9 @@ namespace motor_system{
             Serial.print("Change PID for device: ");
             Serial.println(pid_info.device_id);
         }
-        int current_value = motor_system::read_pid(can, pid_info.device_id, pid_info.pid);
-        Serial.print("Current PID value: ");
-        Serial.println(current_value);
+        // int current_value = motor_system::read_pid(can, pid_info.device_id, pid_info.pid);
+        // Serial.print("Current PID value: ");
+        // Serial.println(current_value);
 
         //Prepare the msg
         const uint8_t msg_hex = 0x32;
@@ -201,9 +202,12 @@ namespace motor_system{
         Serial.println("Done changing PID");
         motor_control::system_reset(can, pid_info.device_id); 
         //double check if the PID is changed
-        current_value = motor_system::read_pid(can, pid_info.device_id, pid_info.pid);
+        int current_value = motor_system::read_pid(can, pid_info.device_id, pid_info.pid);
+        Serial.println("");
         Serial.print("Confirm PID value is: ");
         Serial.println(current_value);
+        Serial.println("");
+
     }
 
 }
@@ -316,8 +320,9 @@ namespace motor_control{
         //Wait for reply
         while (true){
             if (can.read(msg)){
+                #ifdef DEBUG
                 Serial.println("Received message");
-
+                #endif
                 if((msg.id ==0x240+device)&& msg.buf[0]==0x64){
                     Serial.println("ZEROED");
 
@@ -363,8 +368,9 @@ namespace motor_control{
         //Wait for reply
         while (true){
             if (can.read(msg)){
+                #ifdef DEBUG
                 Serial.println("Received message");
-
+                #endif
                 if((msg.id ==0x240+device)&&msg.buf[0]==0x92){
                     Serial.println("GOT POS");
 

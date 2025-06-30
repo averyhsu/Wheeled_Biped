@@ -24,7 +24,27 @@ inline constexpr uint32_t POS_FREQ = 1000; //1000 microseconds: 1KHZ = every 1 m
 
 using FlexCAN =  FlexCAN_T4<CAN1, RX_SIZE_256, TX_SIZE_16>&; //reference value to create adiitional copies
 
+namespace parsing{
+    enum class Pid{
+        invalid,
+        kp_torque,
+        ki_torque,
+        kp_vel,
+        ki_vel,
+        kp_pos,
+        ki_pos,
+        kd_pos,
+    };
+    
+    struct PIDInfo {
+        uint32_t device_id;
+        Pid pid;
+        int target_value;
+    };
+
+}
 namespace motor_system{
+    int read_pid(FlexCAN can, uint32_t device, parsing::Pid pid);
     void change_pid(FlexCAN can);
 }
 namespace motor_control{
