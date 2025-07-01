@@ -37,9 +37,9 @@ namespace parsing{
     };
     
     struct PIDInfo {
-        uint32_t device_id;
-        Pid pid;
-        int target_value;
+        uint32_t device_id {};
+        Pid pid {};
+        int target_value {};
     };
 
 }
