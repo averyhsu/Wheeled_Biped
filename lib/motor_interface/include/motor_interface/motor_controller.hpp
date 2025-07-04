@@ -5,7 +5,6 @@
 #include <FlexCAN_T4.h>
 #include <array>
 #include <cassert> //cpp assertion library
-#include <iostream>
 #include <iomanip>   
 #include <string>
 inline constexpr int DEVICE_NUM = 3;

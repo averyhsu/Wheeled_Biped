@@ -380,7 +380,9 @@ namespace motor_control{
                         data[i]=msg.buf[i+4]; //plus 4 for where the data field starts
                     }
                     double angle = static_cast<double>(parsing::array_to_int(data)/100.0);
-                    Serial.print("The motor is at ");
+                    Serial.print("Motor ");
+                    Serial.print(device);
+                    Serial.print(" is at ");
                     Serial.print(angle);
                     Serial.println(" degrees absolute");
                     break;

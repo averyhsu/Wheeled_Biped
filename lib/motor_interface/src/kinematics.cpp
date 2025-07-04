@@ -9,7 +9,6 @@ namespace IK{
     Angles inverse_kinematics(double x, double y) {
         Angles angles;
         const double R = std::hypot(x, y);
-        const double r = acos(std::fma(L1, L1, L2*L2 - R*R) / (2 * L1 * L2)); //radian
         const double l1 = acos(std::fma(L2,L2,R*R - L1*L1) / (2 * L2 * R)); //radian
         const double l2 = acos(std::fma(L1,L1,R*R - L2*L2) / (2 * L1 * R)); //radian
 
@@ -27,24 +26,27 @@ namespace IK{
         std::cout << "l1: " << (180/M_PI)*l1 << std::endl;
         std::cout << "l2: " << (180/M_PI)*l2 << std::endl;
         #endif 
-
-        std::cout << "Theta1: " << angles.theta1 << ", Theta2: " << angles.theta2 << std::endl;
+        Serial.print("Theta1: ");
+        Serial.print(angles.theta1);
+        Serial.print(", Theta2: ");
+        Serial.println(angles.theta2); 
         return angles;
     }
-
-    int test (){
-        double x, y;
-        std::cout << "Enter x and y coordinates: ";
-        std::cin >> x >> y;
-        Angles angles = IK::inverse_kinematics(x, y);
-        return 0;
-    }
-
 }
-int main(){
-    IK::test();
-    return 0;   
-}
+
+    // int test (){
+    //     double x, y;
+    //     Serial.print("Enter x and y coordinates: ");
+    //     std::cin >> x >> y;
+    //     IK::inverse_kinematics(x, y);
+    //     return 0;
+    // }
+
+// }
+// int main(){
+//     IK::test();
+//     return 0;   
+// }
 
 
 

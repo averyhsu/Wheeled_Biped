@@ -35,7 +35,17 @@ void rotate(FlexCAN can, uint32_t device){
 
     }
 }
-void circle (FlexCAN, int radius, int center_x, int center_y, int time){
+void go_to(FlexCAN can, double x, double y){
+    //This function is not implemented yet.
+    //The idea is to use the inverse kinematics to calculate the angles for each point in the trajectory
+    //and then send the angles to the motor.
+    //The x and y are the coordinates of the point in mm.
+    
+    Angles angles = IK::inverse_kinematics(x, y);
+    motor_control::pos_abs(can, 1, angles.theta1, 60);
+    motor_control::pos_abs(can, 2, angles.theta2, 60);
+}
+void circle (FlexCAN can, double radius, double center_x, double center_y, double time){
     //This function is not implemented yet.
     //The idea is to use the inverse kinematics to calculate the angles for each point in the circle
     //and then send the angles to the motor.
