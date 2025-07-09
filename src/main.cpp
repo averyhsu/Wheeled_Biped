@@ -1,4 +1,5 @@
 // #define DEBUG
+//#define DEBUG2
 #include <FlexCAN_T4.h>
 #include "motor_interface/motor_controller.hpp"
 #include "motor_interface/trajectory.hpp"
