@@ -3,16 +3,15 @@
 #include <FlexCAN_T4.h>
 #include "motor_interface/motor_controller.hpp"
 #include "motor_interface/trajectory.hpp"
-
+#include "motor_interface/motor.hpp"
 
 FlexCAN_T4<CAN1, RX_SIZE_256, TX_SIZE_16> can1;
-inline const int TEST_MOTOR_ID = 2;
+inline const int TEST_MOTOR = 3;
 
 
 void setup() {
     Serial.begin(115200);
     while (!Serial);
-    Serial.println("Hello");
 
     
     can1.begin();
@@ -25,10 +24,8 @@ void setup() {
 
     #endif
 
-    motor_control::zero_encoder(can1, 1);
-    motor_control::zero_encoder(can1, 2);
-    motor_control::get_pos_abs(can1, 1);
-    motor_control::get_pos_abs(can1, 2);
+    motor_control::zero_encoder(can1, TEST_MOTOR);
+    motor_control::get_pos_abs(can1, TEST_MOTOR);
 
 
 
@@ -41,11 +38,13 @@ void loop() {
         Serial.println("Main Debug");
     #endif
 
-    go_to(can1, 10, 13);
+    // go_to(can1, 10, 13);
 
-    delay(3000);
-    motor_control::get_pos_abs(can1, 1);
-    motor_control::get_pos_abs(can1, 2);
+    motor_control::vel(can1, TEST_MOTOR, 60);
+    delay(1500);
+    motor_control::stop(can1, TEST_MOTOR);
+    delay(300);
+    motor_control::get_pos_abs(can1, TEST_MOTOR);
 
 
 

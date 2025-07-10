@@ -9,7 +9,7 @@
  * @param torque: 0.01 A
  *
  */
-void Motor::write(pvt command, int32_t value) {
+auto Motor::write(pvt command, int32_t value) ->void {
     // Implementation for writing motor commands
     CAN_message_t msg;
     msg.id = m_device;
@@ -22,12 +22,12 @@ void Motor::write(pvt command, int32_t value) {
         case pos_abs:
             msg.buf[0] = 0xA4; // Absolute position command
             int32_t dps = rpm_to_dps(MAX_SPEED); 
-            val_to_array(dps, &msg.buf[2]); //store speed in bytes 2-4
+            val_to_array(dps, &msg.buf[2], 2); //store speed in bytes 2-4
             break;
         case pos_inc:
             msg.buf[0] = 0xA8; // Incremental position command
             int32_t dps = rpm_to_dps(MAX_SPEED); 
-            val_to_array(dps, &msg.buf[2]); //store speed in bytes 2-4
+            val_to_array(dps, &msg.buf[2], 2); //store speed in bytes 2-4
             break;
         case velocity:
             msg.buf[0] = 0xA2; // Velocity command
@@ -35,7 +35,7 @@ void Motor::write(pvt command, int32_t value) {
             for(int i =1; i<4;i++){msg.buf[i] = 0x00;}
             break;
         case torque:
-            msg.buf[0] = 0xA1; // Torque command
+            msg.buf[0]; // Torque command
             break;
 
     val_to_array(value, &msg.buf[4]); //store position in bytes 4-7
@@ -51,26 +51,13 @@ void Motor::write(pvt command, int32_t value) {
 
 }
 
-int32_t Motor::read(pvt command) {
+auto Motor::read_pos() -> int32_t {
     CAN_message_t msg;
     int8_t check;
     // Define the message
     msg.id = m_device;
-    msg.len = 8; // Data length code (8 bytes)
-    switch (command) {
-        case pos_abs:
-            msg.buf[0] = 0x92; // Absolute position command
-            break;
-        case pos_inc:
-            msg.buf[0]; // Incremental position command
-            break;
-        case velocity:
-            msg.buf[0]; // Velocity command
-            break;
-        case torque:
-            msg.buf[0]; // Torque command
-            break;
-    }
+    msg.len = 8; // Data length code (8 bytes)   
+    msg.buf[0] = 0x92; // Absolute position command       
     
     check = msg.buf[0]; // Store the command byte for checking later
     for(int i =1; i<8;i++){
@@ -78,11 +65,11 @@ int32_t Motor::read(pvt command) {
     }
     if (m_can.write(msg)) {
         #ifdef DEBUG
-        Serial.println("Read command sent");
+        Serial.println("Read pos command sent");
         #endif
     }
     else {
-        Serial.println("Error sending read command message: " + String(command));
+        Serial.println("Error sending read pos command message: ");
     }
 
     //Wait for reply
@@ -112,14 +99,14 @@ int32_t Motor::read(pvt command) {
 
 }
 
-void Motor::publish_pos(int mode =1, uint32_t interval=INTERVAL){
+auto Motor::publish_pos(int mode =1, uint32_t interval=INTERVAL) -> void {
     CAN_message_t msg;
     msg.id = m_device;
     msg.len = 8; 
     msg.buf[0] = 0xB6;
     msg.buf[1] = 0x92; // choose abs_pos
     msg.buf[2]=mode;
-    val_to_array(interval, &msg.buf[3]); //store interval in bytes 3-4
+    val_to_array(interval, &msg.buf[3],2); //store interval in bytes 3-4
     if (m_can.write(msg)) {
         if(mode){Serial.println("Enable position active reply");}
         else{Serial.println("Disable position active reply");}
@@ -129,10 +116,10 @@ void Motor::publish_pos(int mode =1, uint32_t interval=INTERVAL){
 
 }
 
-int32_t Motor::read_active_pos(){
+auto Motor::read_active_pos() -> int32_t {
         CAN_message_t msg;
         //should add ID check
-        if (m_can.read(msg)&&msg.buf[0]==0x92&&msg.id==(m_device-0x140)){
+        if (m_can.read(msg)&&msg.buf[0]==0x92&&msg.id==(check_id())){
             #ifdef DEBUG
             Serial.println("Received message");
             #endif         
@@ -143,10 +130,77 @@ int32_t Motor::read_active_pos(){
             Serial.print(m_device);
             Serial.print(" is at ");
             Serial.print(angle/100.0);
-            Serial.println(" degrees absolute");
-        
+            Serial.println(" degrees absolute");      
             
             return angle;
         }
         return -1;
 }   
+
+auto Motor::write_pid(pid command, float value)->void{
+    const uint8_t msg_hex = 0x32;
+    CAN_message_t msg;
+    
+    // Define the message
+    msg.id = m_device;
+    msg.len = 8; // Data length code (8 bytes)
+
+    msg.buf[0] = msg_hex;
+    msg.buf[1] = static_cast<uint8_t>(command);
+    val_to_array(0, &msg.buf[2], 2); // Store 0 in bytes 2-3 (not used in this case)
+    float_to_array(value, &msg.buf[4],4);
+    if (m_can.write(msg)) {
+        #ifdef DEBUG
+        Serial.println("Write PID");
+        #endif
+    }
+    else {
+        Serial.println("Error sending read PID message");
+    }
+}
+
+auto Motor::read_pid(pid command) -> float{
+    const uint8_t msg_hex = 0x30;
+    CAN_message_t msg;
+    
+    // Define the message
+    msg.id = m_device;
+    msg.len = 8; // Data length code (8 bytes)
+
+    msg.buf[0] = msg_hex;
+    msg.buf[1] = static_cast<uint8_t>(command);
+    val_to_array(0, &msg.buf[2], 6); // Store 0 in bytes 2-7 (not used in this case)
+    if (m_can.write(msg)) {
+        #ifdef DEBUG
+        Serial.println("Read PID");
+        #endif
+    }
+    else {
+        Serial.println("Error sending read PID message");
+    }
+    
+    while (true){
+        if (m_can.read(msg)){
+            #ifdef DEBUG
+            Serial.println("Received message");
+            #endif
+
+            if((msg.id ==check_id())&& msg.buf[0]==msg_hex){
+
+                //read 4-8 bytes 
+
+                float ret = array_to_float(&msg.buf[4]);
+                Serial.print(static_cast<int>(command));
+                Serial.print(" value is: ");
+                Serial.println(ret);
+                return ret;
+            }
+        }
+        else{
+            // Serial.println("not receiving message");
+
+        }
+    }
+
+    return -1;
+}

@@ -7,6 +7,8 @@
 #include <cassert> //cpp assertion library
 #include <iomanip>   
 #include <string>
+#include <cstring>
+
 inline constexpr int DEVICE_NUM = 3;
 inline constexpr int MAX_SPEED = 805; //805
 inline constexpr int MIN_SPEED = -805;//-805
@@ -36,6 +38,10 @@ class Motor{
             else{ return 0x140+device; }
         }
         
+        auto check_id()->int{
+            return m_device-0x140+0x240; //check ID for reading
+        }
+
         auto rpm_to_dps(int32_t rpm) -> int32_t{
             int32_t res = (rpm/60);     //to rps
             res = res*360;              //to dps
@@ -43,27 +49,50 @@ class Motor{
             return res;
         }
 
-        auto val_to_array(int32_t data, uint8_t* bytes) -> void{
+        auto val_to_array(int32_t data, uint8_t* arr, int element=4) -> void{
             uint32_t uData= static_cast<uint32_t>(data);        //no sign extension when right shifting with unsigned (maintains correct two's complement binary)
 
-            for(int i = 0; i<4; i++){
+            for(int i = 0; i<element; i++){
                 
-                bytes[i]= static_cast<uint8_t>(uData & 0xff);   //grab LSB --> cast
+                arr[i]= static_cast<uint8_t>(uData & 0xff);   //grab LSB --> cast
                 uData = uData>>8;
 
                 #ifdef DEBUG    
-                // std::cout << std::hex<<static_cast<int>(bytes[i])<<'\n';
+                // std::cout << std::hex<<static_cast<int>(arr[i])<<'\n';
                 #endif
             }
-
         }
-       
-        auto array_to_val(uint8_t* data) -> int32_t {
-            int32_t res=0;
-            for(int i = 0; i<4; i++){
-                res = res|(static_cast<int32_t>(data[i]) <<(8*i)); //grab LSB --> cast
+        
+        auto float_to_array(float data, uint8_t* arr, int element = 4) -> void {
+            uint32_t uData;
+            std::memcpy(&uData, &data, sizeof(float));  // Bitcast float to uint32_t safely
+
+            for (int i = 0; i < element; i++) {
+                arr[i] = static_cast<uint8_t>(uData & 0xFF);  // Extract LSB
+                uData = uData >> 8;
+
+                #ifdef DEBUG
+                // std::cout << std::hex << static_cast<int>(arr[i]) << '\n';
+                #endif
             }
-            return res;
+        }
+
+        auto array_to_val(uint8_t* arr, int element=4) -> int32_t {
+            uint32_t res=0;
+            for(int i = 0; i<element; i++){
+                res = res|(static_cast<uint32_t>(arr[i]) <<(8*i)); //grab LSB --> cast for no sign extension
+            }
+            return static_cast<int32_t>(res);
+        }
+        
+        auto array_to_float(uint8_t* arr, int element =4) -> float {
+            uint32_t res = 0;
+            for (int i = 0; i < element; ++i) {
+                res |= static_cast<uint32_t>(arr[i]) << (8 * i);  // Little-endian
+            }
+            float result;
+            std::memcpy(&result, &res, sizeof(float));  // Bitcast safely
+            return result;
         }
 
     
@@ -76,11 +105,20 @@ class Motor{
             velocity=3,
             torque=4,            
         };
+        enum pid{
+            invalid,    //0
+            kp_torque,  //1
+            ki_torque,  //2
+            kp_vel,     //3
+            ki_vel,     //4
+            kp_pos,     //5
+            ki_pos,     //6
+            kd_pos,     //7
+        };
 
         // Constructor to initialize the motor with a FlexCAN instance and device ID
         Motor(FlexCAN can, uint32_t device) : m_can{can}, m_device{id_assignment(device)} {};
 
-       
         /**
          * @brief Write a command to the motor.
          * 
@@ -99,10 +137,11 @@ class Motor{
          * @param velocity: rpm
          * @param torque: 0.01 A
          */
-        auto read(pvt command) -> int32_t;
+        auto read_pos() -> int32_t;
 
         auto publish_pos(int mode =1, uint32_t interval=INTERVAL) -> void;
         auto read_active_pos() -> int32_t;
+        
         /**
          * @brief Resets the System. 
          *        This is needed after zero-ing encoder
@@ -160,4 +199,6 @@ class Motor{
                 }
             }
         }
-};
+        auto read_pid(pid command) -> float;
+        auto write_pid(pid command, float value)->void;
+    };
