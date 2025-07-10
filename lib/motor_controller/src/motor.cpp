@@ -1,4 +1,6 @@
-#include "motor_interface/motor.hpp"
+#include "motor_controller/motor.hpp"
+#define DEBUG
+// #define DEBUG2
 
 /**
  * @brief  Write a command to the motor.
@@ -14,6 +16,8 @@ auto Motor::write(pvt command, int32_t value) ->void {
     CAN_message_t msg;
     msg.id = m_device;
     msg.len = 8; 
+    int32_t dps = rpm_to_dps(MAX_SPEED); 
+
     switch (command) {
         case stop:
             msg.buf[0] = 0x81; // Stop command
@@ -21,45 +25,49 @@ auto Motor::write(pvt command, int32_t value) ->void {
             break;
         case pos_abs:
             msg.buf[0] = 0xA4; // Absolute position command
-            int32_t dps = rpm_to_dps(MAX_SPEED); 
             val_to_array(dps, &msg.buf[2], 2); //store speed in bytes 2-4
             break;
         case pos_inc:
             msg.buf[0] = 0xA8; // Incremental position command
-            int32_t dps = rpm_to_dps(MAX_SPEED); 
             val_to_array(dps, &msg.buf[2], 2); //store speed in bytes 2-4
             break;
         case velocity:
             msg.buf[0] = 0xA2; // Velocity command
             value = rpm_to_dps(value); // Convert RPM to 0.01 DPS
             for(int i =1; i<4;i++){msg.buf[i] = 0x00;}
+           
             break;
         case torque:
             msg.buf[0]; // Torque command
             break;
+    }
 
     val_to_array(value, &msg.buf[4]); //store position in bytes 4-7
+    
+    
     if (m_can.write(msg)) {
-        // Serial.println("Absolute position command");
+        
+        #ifdef DEBUG
+        Serial.println("write command");
+        #endif
     }
     else {
         Serial.println("Error sending command message: " + String(command));
     }
-    }
-
-
-
+    
 }
 
 auto Motor::read_pos() -> int32_t {
+    uint8_t hex = 0x92;
     CAN_message_t msg;
-    int8_t check;
+    uint8_t check;
     // Define the message
     msg.id = m_device;
     msg.len = 8; // Data length code (8 bytes)   
-    msg.buf[0] = 0x92; // Absolute position command       
+    msg.buf[0] = hex; // Absolute position command       
     
-    check = msg.buf[0]; // Store the command byte for checking later
+    check =hex; // Store the command byte for checking later
+    Serial.println(check, HEX);
     for(int i =1; i<8;i++){
         msg.buf[i] = 0x00;
     }
@@ -74,21 +82,20 @@ auto Motor::read_pos() -> int32_t {
 
     //Wait for reply
     while (true){
-        if (m_can.read(msg)){
+        if (m_can.read(msg)&&msg.buf[0]==check){
             #ifdef DEBUG
             Serial.println("Received message");
-            #endif
-            if(msg.buf[0]==check){
-                //read 4-8 bytes daug
-
-                double angle = static_cast<double>(array_to_val(&msg.buf[4])/100.0);
-                Serial.print("Motor ");
-                Serial.print(m_device);
-                Serial.print(" is at ");
-                Serial.print(angle);
-                Serial.println(" degrees absolute");
-                break;
-            }
+            Serial.println(msg.buf[0],HEX);
+            #endif          
+            //read 4-8 bytes d
+            double angle = static_cast<double>(array_to_val(&msg.buf[4]));
+            Serial.print("Motor ");
+            Serial.print(m_device-0x140);
+            Serial.print(" is at ");
+            Serial.print((angle/100.0));
+            Serial.println(" degrees absolute");
+            return angle;
+        
         }
         else{
             #ifdef DEBUG2
@@ -99,7 +106,7 @@ auto Motor::read_pos() -> int32_t {
 
 }
 
-auto Motor::publish_pos(int mode =1, uint32_t interval=INTERVAL) -> void {
+auto Motor::publish_pos(int mode, uint32_t interval) -> void {
     CAN_message_t msg;
     msg.id = m_device;
     msg.len = 8; 

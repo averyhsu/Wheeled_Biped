@@ -23,6 +23,23 @@ inline constexpr uint32_t POS_FREQ = 1000; //1000 microseconds: 1KHZ = every 1 m
 
 using FlexCAN =  FlexCAN_T4<CAN1, RX_SIZE_256, TX_SIZE_16>&; //reference value to create adiitional copies
 
+enum pvt{
+    stop=0,
+    pos_abs=1, 
+    pos_inc=2,
+    velocity=3,
+    torque=4,            
+    };
+enum pid{
+    invalid,    //0
+    kp_torque,  //1
+    ki_torque,  //2
+    kp_vel,     //3
+    ki_vel,     //4
+    kp_pos,     //5
+    ki_pos,     //6
+    kd_pos,     //7
+};
 
 class Motor{
     private:
@@ -97,25 +114,7 @@ class Motor{
 
     
     public:
-        enum pvt
-        {
-            stop=0,
-            pos_abs=1, 
-            pos_inc=2,
-            velocity=3,
-            torque=4,            
-        };
-        enum pid{
-            invalid,    //0
-            kp_torque,  //1
-            ki_torque,  //2
-            kp_vel,     //3
-            ki_vel,     //4
-            kp_pos,     //5
-            ki_pos,     //6
-            kd_pos,     //7
-        };
-
+        
         // Constructor to initialize the motor with a FlexCAN instance and device ID
         Motor(FlexCAN can, uint32_t device) : m_can{can}, m_device{id_assignment(device)} {};
 
@@ -127,7 +126,7 @@ class Motor{
          * @param velocity: rpm
          * @param torque: 0.01 A
          */
-        auto write(pvt command, int32_t value) -> void;
+        auto write(pvt command, int32_t value=0) -> void;
 
         /**
          * @brief Read motor data.
@@ -159,7 +158,7 @@ class Motor{
             } else {
                 Serial.println("Error sending system reset message");
             }
-            delay(300);
+            delay(1000);
             Serial.println("System Resetted");
 
         }
@@ -187,9 +186,9 @@ class Motor{
                     if ((msg.buf[0] == 0x64)) {
 
                         int32_t initial = array_to_val(&msg.buf[4]);
-                        system_reset();
-                        Serial.print("Encoder zeroed at raw pulse");
+                        Serial.print("Encoder zeroed at raw pulse ");
                         Serial.println(initial);
+                        system_reset();
                         break;
                     }
                 } else {
