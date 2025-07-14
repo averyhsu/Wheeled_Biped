@@ -1,5 +1,5 @@
 
-#include "motor_interface/kinematics.hpp"
+#include "motor_controller/kinematics.hpp"
 
 namespace IK{
     /// @brief Inverse kinematics calculation

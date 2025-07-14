@@ -38,7 +38,7 @@ void loop() {
     m3.write(stop);
     delay(1000);
     m3.read_pos();
-
+    
  
     // #ifdef DEBUG
     //     Serial.println("Main Debug");

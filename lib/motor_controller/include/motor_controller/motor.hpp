@@ -10,10 +10,10 @@
 #include <cstring>
 
 inline constexpr int DEVICE_NUM = 3;
+inline constexpr uint32_t ALL = 0;
 inline constexpr int MAX_SPEED = 805; //805
 inline constexpr int MIN_SPEED = -805;//-805
 inline constexpr uint32_t CMD_PERIOD_US = 1000;   // 1 kHz  (1000 µs)
-inline constexpr uint32_t ALL = 0;
 inline constexpr uint32_t INTERVAL=10; //active reply interval unit: 10 millisecond
 
 //Control loop frequencies
@@ -145,59 +145,9 @@ class Motor{
          * @brief Resets the System. 
          *        This is needed after zero-ing encoder
          */
-        auto system_reset() -> void {
-            CAN_message_t msg;
-            msg.id = m_device;
-            msg.len = 8; 
-            msg.buf[0] = 0x76; // System reset command
-            for(int i =1; i<8; i++){msg.buf[i] = 0x00;}
-            if (m_can.write(msg)) {
-                #ifdef DEBUG
-                Serial.println("System reset sent");
-                #endif
-            } else {
-                Serial.println("Error sending system reset message");
-            }
-            delay(1000);
-            Serial.println("System Resetted");
+        auto system_reset() -> void;
 
-        }
-
-        auto zero_encoder() -> void {
-            CAN_message_t msg;
-            msg.id = m_device;
-            msg.len = 8; 
-            msg.buf[0] = 0x64; // Zero encoder command
-            for(int i =1; i<8; i++){msg.buf[i] = 0x00;}
-            if (m_can.write(msg)) {
-                #ifdef DEBUG
-                Serial.println("Zero encoder command sent");
-                #endif
-            } else {
-                Serial.println("Error sending zero encoder message");
-            }
-
-            // Wait for reply
-            while (true) {
-                if (m_can.read(msg)) {
-                    #ifdef DEBUG
-                    Serial.println("Received message");
-                    #endif
-                    if ((msg.buf[0] == 0x64)) {
-
-                        int32_t initial = array_to_val(&msg.buf[4]);
-                        Serial.print("Encoder zeroed at raw pulse ");
-                        Serial.println(initial);
-                        system_reset();
-                        break;
-                    }
-                } else {
-                    #ifdef DEBUG
-                    Serial.println("Not receiving message");
-                    #endif
-                }
-            }
-        }
+        auto zero_encoder() -> void;
         auto read_pid(pid command) -> float;
         auto write_pid(pid command, float value)->void;
     };

@@ -211,3 +211,57 @@ auto Motor::read_pid(pid command) -> float{
 
     return -1;
 }
+
+auto Motor::system_reset() -> void {
+            CAN_message_t msg;
+            msg.id = m_device;
+            msg.len = 8; 
+            msg.buf[0] = 0x76; // System reset command
+            for(int i =1; i<8; i++){msg.buf[i] = 0x00;}
+            if (m_can.write(msg)) {
+                #ifdef DEBUG
+                Serial.println("System reset sent");
+                #endif
+            } else {
+                Serial.println("Error sending system reset message");
+            }
+            delay(1000);
+            Serial.println("System Resetted");
+
+        }
+
+auto Motor::zero_encoder() -> void {
+            CAN_message_t msg;
+            msg.id = m_device;
+            msg.len = 8; 
+            msg.buf[0] = 0x64; // Zero encoder command
+            for(int i =1; i<8; i++){msg.buf[i] = 0x00;}
+            if (m_can.write(msg)) {
+                #ifdef DEBUG
+                Serial.println("Zero encoder command sent");
+                #endif
+            } else {
+                Serial.println("Error sending zero encoder message");
+            }
+
+            // Wait for reply
+            while (true) {
+                if (m_can.read(msg)) {
+                    #ifdef DEBUG
+                    Serial.println("Received message");
+                    #endif
+                    if ((msg.buf[0] == 0x64)) {
+
+                        int32_t initial = array_to_val(&msg.buf[4]);
+                        Serial.print("Encoder zeroed at raw pulse ");
+                        Serial.println(initial);
+                        system_reset();
+                        break;
+                    }
+                } else {
+                    #ifdef DEBUG
+                    Serial.println("Not receiving message");
+                    #endif
+                }
+            }
+        }

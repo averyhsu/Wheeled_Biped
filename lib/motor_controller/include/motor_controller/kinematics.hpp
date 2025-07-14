@@ -1,7 +1,7 @@
 #pragma once
 #include <Arduino.h>
 #include <cmath>
-const double L1 = 17.5; //mm
+const double L1 = 17.4; //mm
 const double L2 = 15.0; //mm
 
 
