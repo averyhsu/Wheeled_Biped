@@ -1,5 +1,5 @@
 #include "motor_controller/motor.hpp"
-#define DEBUG
+// #define DEBUG
 // #define DEBUG2
 
 /**
@@ -67,7 +67,6 @@ auto Motor::read_pos() -> int32_t {
     msg.buf[0] = hex; // Absolute position command       
     
     check =hex; // Store the command byte for checking later
-    Serial.println(check, HEX);
     for(int i =1; i<8;i++){
         msg.buf[i] = 0x00;
     }
@@ -164,6 +163,8 @@ auto Motor::write_pid(pid command, float value)->void{
     else {
         Serial.println("Error sending read PID message");
     }
+    delay(5);
+
 }
 
 auto Motor::read_pid(pid command) -> float{
@@ -197,9 +198,10 @@ auto Motor::read_pid(pid command) -> float{
                 //read 4-8 bytes 
 
                 float ret = array_to_float(&msg.buf[4]);
-                Serial.print(static_cast<int>(command));
+                Serial.print("PID command ");
+                Serial.print(String(command));
                 Serial.print(" value is: ");
-                Serial.println(ret);
+                Serial.println(ret,3);
                 return ret;
             }
         }
@@ -295,9 +297,9 @@ auto Motor::read_accel(accel command) -> void{
             if((msg.id ==check_id())&& msg.buf[0]==msg_hex){
                 
                 //read 4-8 bytes
-                float ret = array_to_float(&msg.buf[4]);
+                float ret = array_to_val(&msg.buf[4]);
                 Serial.print("accel/decel command ");
-                Serial.print(static_cast<int>(command));
+                Serial.print(String(command));
                 Serial.print(" value is: ");
                 Serial.println(ret);
                 return;
@@ -343,6 +345,7 @@ auto Motor::write_accel(accel command, int32_t val) -> void{
     else {
         Serial.println("Error sending command message: " + String(command));
     }
-    
+    delay(5);
+
 }
 

@@ -36,14 +36,14 @@ enum pvt{
     torque=4,            
     };
 enum pid{
-    invalid,    //0
-    kp_torque,  //1
-    ki_torque,  //2
-    kp_vel,     //3
-    ki_vel,     //4
-    kp_pos,     //5
-    ki_pos,     //6
-    kd_pos,     //7
+    invalid=0,    //0
+    kp_torque=1,  //1
+    ki_torque=2,  //2
+    kp_vel=4,     //3
+    ki_vel=5,     //4
+    kp_pos=7,     //5
+    ki_pos=8,     //6
+    kd_pos=9,     //7
 };
 
 class Motor{

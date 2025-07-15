@@ -1,11 +1,12 @@
 #include "motor_controller/trajectory.hpp"
+#include <Arduino.h>
 //1) 360 degrees in 3000 millisecond
 //2) 1)--> 0.12 deggrees / ms --> 12 (0.01 degrees)/ms
 //3) send frequency = 1ms
-const int DEGREES = 240000; //360 degrees = 36000 (0.01 degrees)
-const int STEP_WIDTH = 1200; //12 degrees = 1200 (0.01 degrees)
-const int DELAY = 20;
-const int LOOP_TIME = (DEGREES/STEP_WIDTH)*DELAY; 
+const int DEGREES = 360*100; //360 degrees = 36000 (0.01 degrees)
+const int STEP_WIDTH = 100; //12 degrees = 1200 (0.01 degrees)
+const int DELAY = 1000; //in micros: 1 milli = 1000 micros 1kHZ speed
+const int LOOP_TIME = (DEGREES/STEP_WIDTH)*(DELAY/1000.0); 
 
 //motor initialization
 
@@ -16,6 +17,8 @@ const int LOOP_TIME = (DEGREES/STEP_WIDTH)*DELAY;
 // 2. 1200 (12) : 20  --> for some reason I can push a faster loop 
 
 void rotate(Motor device){
+    Serial.println("Loop time: " + String(LOOP_TIME) + " ms");
+
     
     //timer initialization
     uint32_t  lastSend = 0;
@@ -25,7 +28,7 @@ void rotate(Motor device){
 
     while((millis()-startTime)<LOOP_TIME){
         uint32_t now = micros();
-        if (now - lastSend >= DELAY*1000) { //sebd msg every 50 milliseconds
+        if (now - lastSend >= DELAY) { //sebd msg every 50 milliseconds
             lastSend = now;
             timer=timer+1;
             pos = timer*STEP_WIDTH; 
