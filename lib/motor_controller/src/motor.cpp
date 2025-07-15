@@ -265,3 +265,84 @@ auto Motor::zero_encoder() -> void {
                 }
             }
         }
+
+auto Motor::read_accel(accel command) -> void{
+    const uint8_t msg_hex = 0x42;
+    CAN_message_t msg;
+    
+    // Define the message
+    msg.id = m_device;
+    msg.len = 8; // Data length code (8 bytes)
+
+    msg.buf[0] = msg_hex;
+    msg.buf[1] = static_cast<uint8_t>(command);
+    val_to_array(0, &msg.buf[2], 6); // Store 0 in bytes 2-7 (not used in this case)
+    if (m_can.write(msg)) {
+        #ifdef DEBUG
+        Serial.println("Read accel/decel");
+        #endif
+    }
+    else {
+        Serial.println("Error sending accel/decel");
+    }
+    
+    while (true){
+        if (m_can.read(msg)){
+            #ifdef DEBUG
+            Serial.println("Received message");
+            #endif
+
+            if((msg.id ==check_id())&& msg.buf[0]==msg_hex){
+                
+                //read 4-8 bytes
+                float ret = array_to_float(&msg.buf[4]);
+                Serial.print("accel/decel command ");
+                Serial.print(static_cast<int>(command));
+                Serial.print(" value is: ");
+                Serial.println(ret);
+                return;
+            }
+        }
+        else{
+            // Serial.println("not receiving message");
+
+        }
+    }
+
+}
+auto Motor::write_accel(accel command, int32_t val) -> void{
+    const uint8_t msg_hex = 0x43;
+
+    CAN_message_t msg;
+    msg.id = m_device;
+    msg.len = 8; 
+    msg.buf[0] = msg_hex; 
+    
+    switch (command) {
+        case accel_pos:
+            msg.buf[1] = 0x00; // Stop command
+            break;
+        case decel_pos:
+            msg.buf[1] = 0x01; // Absolute position command
+            break;
+        case accel_vel:
+            msg.buf[1] = 0x02; // Incremental position command
+            break;
+        case decel_vel:
+            msg.buf[1] = 0x03; // Velocity command
+            for(int i =1; i<4;i++){msg.buf[i] = 0x00;}
+            break;
+    }
+    val_to_array(0, &msg.buf[2],2); 
+    val_to_array(val, &msg.buf[4]);         
+    if (m_can.write(msg)) {        
+        #ifdef DEBUG
+        Serial.println("write accel/decel");
+        #endif
+    }
+    else {
+        Serial.println("Error sending command message: " + String(command));
+    }
+    
+}
+

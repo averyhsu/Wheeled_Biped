@@ -22,7 +22,12 @@ inline constexpr uint32_t SPEED_FREQ = 200; //200 microseconds: 5KHZ every 0.2 m
 inline constexpr uint32_t POS_FREQ = 1000; //1000 microseconds: 1KHZ = every 1 ms =1000 microseconds
 
 using FlexCAN =  FlexCAN_T4<CAN1, RX_SIZE_256, TX_SIZE_16>&; //reference value to create adiitional copies
-
+enum accel{
+    accel_pos=0,
+    decel_pos= 1,
+    accel_vel = 2,
+    decel_vel =3,          
+    };
 enum pvt{
     stop=0,
     pos_abs=1, 
@@ -129,7 +134,7 @@ class Motor{
         auto write(pvt command, int32_t value=0) -> void;
 
         /**
-         * @brief Read motor data.
+         * @brief Read motor position.
          * 
          * @param[in]  command The pvt command to read from the motor.
          * @param position: 0.01 deg/prints deg
@@ -148,6 +153,9 @@ class Motor{
         auto system_reset() -> void;
 
         auto zero_encoder() -> void;
+        
         auto read_pid(pid command) -> float;
         auto write_pid(pid command, float value)->void;
+        auto read_accel(accel command) -> void;
+        auto write_accel(accel command, int32_t val) -> void;
     };
