@@ -1,5 +1,6 @@
 //1. convert RPM to DPS
 //2. parse number in eight 8 bytes array
+// #define Debug
 #pragma once
 #include <Arduino.h>
 #include <FlexCAN_T4.h>
@@ -11,7 +12,7 @@
 
 inline constexpr int DEVICE_NUM = 3;
 inline constexpr uint32_t ALL = 0;
-inline constexpr int MAX_SPEED = 805; //805
+inline constexpr int MAX_SPEED = 800; //805
 inline constexpr int MIN_SPEED = -805;//-805
 inline constexpr uint32_t CMD_PERIOD_US = 1000;   // 1 kHz  (1000 µs)
 inline constexpr uint32_t INTERVAL=10; //active reply interval unit: 10 millisecond
@@ -33,7 +34,8 @@ enum pvt{
     pos_abs=1, 
     pos_inc=2,
     velocity=3,
-    torque=4,            
+    torque=4, 
+    release=5,           
     };
 enum pid{
     invalid=0,    //0

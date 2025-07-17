@@ -8,3 +8,4 @@ struct Leg {
 
 void rotate(Motor device);
 void go_to(Leg leg, double x, double y);
+void circle(Leg leg, double radius);

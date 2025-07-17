@@ -1,12 +1,5 @@
 #include "motor_controller/trajectory.hpp"
 #include <Arduino.h>
-//1) 360 degrees in 3000 millisecond
-//2) 1)--> 0.12 deggrees / ms --> 12 (0.01 degrees)/ms
-//3) send frequency = 1ms
-const int DEGREES = 360*100; //360 degrees = 36000 (0.01 degrees)
-const int STEP_WIDTH = 100; //12 degrees = 1200 (0.01 degrees)
-const int DELAY = 1000; //in micros: 1 milli = 1000 micros 1kHZ speed
-const int LOOP_TIME = (DEGREES/STEP_WIDTH)*(DELAY/1000.0); 
 
 //motor initialization
 
@@ -17,6 +10,14 @@ const int LOOP_TIME = (DEGREES/STEP_WIDTH)*(DELAY/1000.0);
 // 2. 1200 (12) : 20  --> for some reason I can push a faster loop 
 
 void rotate(Motor device){
+        //1) 360 degrees in 3000 millisecond
+    //2) 1)--> 0.12 deggrees / ms --> 12 (0.01 degrees)/ms
+    //3) send frequency = 1ms
+    const int DEGREES = 30*100; //360 degrees = 36000 (0.01 degrees)
+    const int STEP_WIDTH = 50; //12 degrees = 1200 (0.01 degrees)
+    const int DELAY = 1000; //in micros: 1 milli = 1000 micros 1kHZ speed
+    const int LOOP_TIME = (DEGREES/STEP_WIDTH)*(DELAY/1000.0); 
+
     Serial.println("Loop time: " + String(LOOP_TIME) + " ms");
 
     
@@ -51,11 +52,30 @@ void go_to(Leg leg, double x, double y){
 }
 
    
-void circle (FlexCAN can, double radius, double center_x, double center_y, double time){
-    //This function is not implemented yet.
-    //The idea is to use the inverse kinematics to calculate the angles for each point in the circle
-    //and then send the angles to the motor.
-    //The radius is in mm, the center_x and center_y are the coordinates of the center of the circle.
-    //The step_width is the distance between each point in the circle.
+void circle (Leg leg, double radius){
     
+    const int STEP_ANGLE = 500; //unit: 0.01 degrees --> 0.1 degrees step
+    const int FREQ = 20000; //unit: microseconds; --> 1 millisecond = 1khz
+    const int LOOP_TIME =(360.0/(STEP_ANGLE/100.0))*(FREQ/1000.0); //unit: seconds --> 3600 iterations * FREQ = total time in millis
+    const int centerX = 16;
+    const int centerY = 0;
+    Serial.println("Loop time: " + String(LOOP_TIME) + " ms");    
+    //timer initialization
+    uint32_t  lastSend = 0;
+    double theta = 0;
+    double x;
+    double y;
+    unsigned long startTime = millis();       
+
+    while((millis()-startTime)<LOOP_TIME){
+        uint32_t now = micros();
+        if (now - lastSend >= FREQ) { //sebd msg every 50 milliseconds
+            lastSend = now;
+
+            x = centerX+radius*cos((M_PI / 180.0)* theta);
+            y = centerY+radius*sin((M_PI / 180.0)* theta);
+            go_to(leg, x, y);
+            theta = theta+STEP_ANGLE/100.0;
+        }
+    }
 }

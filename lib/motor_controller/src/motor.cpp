@@ -21,7 +21,7 @@ auto Motor::write(pvt command, int32_t value) ->void {
     switch (command) {
         case stop:
             msg.buf[0] = 0x81; // Stop command
-            for(int i =1; i<8; i++){msg.buf[i] = 0x00;}
+            val_to_array(0,&msg.buf[1],7);  
             break;
         case pos_abs:
             msg.buf[0] = 0xA4; // Absolute position command
@@ -34,11 +34,14 @@ auto Motor::write(pvt command, int32_t value) ->void {
         case velocity:
             msg.buf[0] = 0xA2; // Velocity command
             value = rpm_to_dps(value); // Convert RPM to 0.01 DPS
-            for(int i =1; i<4;i++){msg.buf[i] = 0x00;}
-           
+            val_to_array(0,&msg.buf[1],3);
             break;
         case torque:
             msg.buf[0]; // Torque command
+            break;
+        case release:
+            msg.buf[0] = 0x80;
+            val_to_array(0,&msg.buf[1],7);  
             break;
     }
 
@@ -54,6 +57,8 @@ auto Motor::write(pvt command, int32_t value) ->void {
     else {
         Serial.println("Error sending command message: " + String(command));
     }
+
+  
     
 }
 

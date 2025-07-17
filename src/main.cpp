@@ -6,8 +6,14 @@
 #include "motor_controller/motor.hpp"
 
 FlexCAN_T4<CAN1, RX_SIZE_256, TX_SIZE_16> can1;
-inline const int TEST_MOTOR = 3;
+Motor m1(can1, 1);
+Motor m2(can1, 2);
 Motor m3 (can1, 3);
+Leg l1 = {m1, m2};
+
+Motor TEST_MOTOR = m1;
+
+
 
 
 
@@ -19,63 +25,72 @@ void setup() {
     can1.setBaudRate(1000000); // Set baud rate to 1Mbps(motor requirement)
 
     Serial.println("CAN bus initialized.");
-    m3.zero_encoder();
+       go_to(l1,32.4,0);
+    delay(1000);
+    // m1.zero_encoder();
+    // m2.zero_encoder();
+    // m3.zero_encoder();
+
     // #ifdef DEBUG
     //     Serial.println("Debug mode is ON");
     //     motor_system::change_pid(can1);
 
     // #endif
-    // m3.zero_encoder();
-
-    // motor_control::zero_encoder(can1, TEST_MOTOR);
-    // motor_control::get_pos_abs(can1, TEST_MOTOR);
-
 }
 
 void loop() {
-    // delay(1000);
-    // m3.write(velocity, 60);
-    // delay(2000);
-    // m3.write(stop);
-    // delay(1000);
-    // m3.read_pid(kp_pos);
-    // m3.read_accel(accel_pos);
-    // m3.read_accel(accel_pos);
-
-    m3.write(stop);
-    m3.read_pos();
-
-    m3.write_accel(accel_pos, 60000);
-    delay(300);
-    m3.write_accel(decel_pos, 5000);
 
 
-    m3.read_accel(accel_pos);
-    m3.read_accel(decel_pos);
-    m3.read_accel(accel_vel);
-    m3.read_accel(decel_vel);
-    rotate(m3);
-    delay(500);
-    m3.read_pos();
+    /*PID*/
 
-    
+    // TEST_MOTOR.read_pid(kp_pos);
+    // TEST_MOTOR.read_pid(ki_pos);
+    // TEST_MOTOR.read_pid(kd_pos);
+
+    // TEST_MOTOR.write_pid(kp_pos, 0.1);//0.1
+    // delay(100);
+    // TEST_MOTOR.write_pid(ki_pos, 0.0); //0.001
+    // delay(100);
+    // TEST_MOTOR.write_pid(kd_pos, 60); //0.5
+    // delay(100);
+
+    // TEST_MOTOR.read_pid(kp_pos);
+    // TEST_MOTOR.read_pid(ki_pos);
+    // TEST_MOTOR.read_pid(kd_pos);
+    // delay(100);
 
  
-    // #ifdef DEBUG
-    //     Serial.println("Main Debug");
-    // #endif
+    /*CHANGE ACCELERATION*/
 
-    // go_to(can1, 10, 13);
-
-    // motor_control::vel(can1, TEST_MOTOR, 60);
-    // delay(1500);
-    // motor_control::stop(can1, TEST_MOTOR);
+    // TEST_MOTOR.write_accel(accel_pos, 20000);
     // delay(300);
-    // motor_control::get_pos_abs(can1, TEST_MOTOR);
+    // TEST_MOTOR.read_accel(accel_pos);
+    // delay(100);
 
 
+    /*TEST MOVE COMMANDS*/
 
+    // TEST_MOTOR.read_pos();
+    // delay(500);
+    // m1.write(stop);
+    // TEST_MOTOR.write(pos_abs, 2000);
+    // // rotate(TEST_MOTOR);
+    // delay(500);
+    // TEST_MOTOR.read_pos();
+    // delay(5000);
 
+    /*REAL MOVE*/
+    // go_to(l1,32.4,0);
+    // delay(1000);
+    go_to(l1, 21,0);
+    delay(1000);
+    for(int i =0; i<5;i++){
+        circle(l1, 5.0);
+    }
+
+    // delay(10000);
+    // m1.write(release);
+    // m2.write(release);
     while(true);    
 }
 

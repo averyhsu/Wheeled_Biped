@@ -13,12 +13,12 @@ namespace IK{
         const double l2 = acos(std::fma(L1,L1,R*R - L2*L2) / (2 * L1 * R)); //radian
 
         const double theta1_rad = l2 + asin(y/R); // radians
-        const double theta2_rad = -(-1.5707963268 + l1 + acos(y/R)) - theta1_rad; // radians, constant is 90 degrees
+        const double theta2_rad = (-(-1.5707963268 + l1 + acos(y/R)) - theta1_rad); // radians, constant is 90 degrees
 
         //Now convert both to 0.01 degrees
         //Note .theta1/2 are in 'int' not 'double' beware of conversion errors
         angles.theta1 = (180/M_PI)*100*theta1_rad;
-        angles.theta2 = (180/M_PI)*100*theta2_rad;
+        angles.theta2 = -(180/M_PI)*100*theta2_rad;
 
         #ifdef DEBUG
         std::cout << "R: " << R << std::endl;
