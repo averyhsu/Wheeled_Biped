@@ -12,7 +12,7 @@
 
 inline constexpr int DEVICE_NUM = 3;
 inline constexpr uint32_t ALL = 0;
-inline constexpr int MAX_SPEED = 800; //805
+inline constexpr int MAX_SPEED = 150; //805
 inline constexpr int MIN_SPEED = -805;//-805
 inline constexpr uint32_t CMD_PERIOD_US = 1000;   // 1 kHz  (1000 µs)
 inline constexpr uint32_t INTERVAL=10; //active reply interval unit: 10 millisecond

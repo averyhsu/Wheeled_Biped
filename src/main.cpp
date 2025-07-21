@@ -25,10 +25,10 @@ void setup() {
     can1.setBaudRate(1000000); // Set baud rate to 1Mbps(motor requirement)
 
     Serial.println("CAN bus initialized.");
-       go_to(l1,32.4,0);
-    delay(1000);
-    // m1.zero_encoder();
-    // m2.zero_encoder();
+    go_to(l1,32.4,0);
+    delay(300);
+    m1.zero_encoder();
+    m2.zero_encoder();
     // m3.zero_encoder();
 
     // #ifdef DEBUG
@@ -62,10 +62,17 @@ void loop() {
  
     /*CHANGE ACCELERATION*/
 
-    // TEST_MOTOR.write_accel(accel_pos, 20000);
-    // delay(300);
-    // TEST_MOTOR.read_accel(accel_pos);
-    // delay(100);
+    m1.write_accel(accel_pos, 40000);
+    delay(300);
+    m1.read_accel(accel_pos);
+    delay(100);
+
+
+    m2.write_accel(accel_pos, 40000);
+    delay(300);
+    m2.read_accel(accel_pos);
+    delay(100);
+
 
 
     /*TEST MOVE COMMANDS*/
@@ -80,12 +87,12 @@ void loop() {
     // delay(5000);
 
     /*REAL MOVE*/
-    // go_to(l1,32.4,0);
-    // delay(1000);
-    go_to(l1, 21,0);
-    delay(1000);
-    for(int i =0; i<5;i++){
-        circle(l1, 5.0);
+    double width =5;
+  
+    go_to(l1, 16-width, 0-width);
+    delay(500);
+    for(int i =0; i<1;i++){
+        square(l1, width);
     }
 
     // delay(10000);

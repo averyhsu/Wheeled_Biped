@@ -54,8 +54,8 @@ void go_to(Leg leg, double x, double y){
    
 void circle (Leg leg, double radius){
     
-    const int STEP_ANGLE = 500; //unit: 0.01 degrees --> 0.1 degrees step
-    const int FREQ = 20000; //unit: microseconds; --> 1 millisecond = 1khz
+    const int STEP_ANGLE = 250; //unit: 0.01 degrees --> 0.1 degrees step
+    const int FREQ = 15000; //unit: microseconds; --> 1 millisecond = 1khz
     const int LOOP_TIME =(360.0/(STEP_ANGLE/100.0))*(FREQ/1000.0); //unit: seconds --> 3600 iterations * FREQ = total time in millis
     const int centerX = 16;
     const int centerY = 0;
@@ -79,3 +79,60 @@ void circle (Leg leg, double radius){
         }
     }
 }
+
+void square(Leg leg, double halfSide){
+    const int STEP_ANGLE = 25;            // 0.01 units → 250 * 0.01 = 2.5 units per step
+    const double STEP      = STEP_ANGLE / 100.0;  
+    const int FREQ         = 10000;        // microseconds between steps
+    const double sideLen   = 2 * halfSide;
+    
+    // how many linear steps on each side
+    const int STEPS_PER_SIDE = int(sideLen / STEP);
+    const int TOTAL_STEPS    = STEPS_PER_SIDE * 4;
+    
+    // total time (ms) = #steps * (FREQ µs / 1000)
+    const int LOOP_TIME = int(TOTAL_STEPS * (FREQ / 1000.0));
+
+    const int centerX = 16;
+    const int centerY = 0;
+    Serial.println("Loop time: " + String(LOOP_TIME) + " ms");
+
+    uint32_t lastSend      = 0;
+    int      stepCount     = 0;
+    unsigned long startTime = millis();
+
+    while ((millis() - startTime) < LOOP_TIME && stepCount < TOTAL_STEPS) {
+        uint32_t now = micros();
+        if (now - lastSend >= FREQ) {
+            lastSend = now;
+
+            int idx     = stepCount;  
+            int sideNum = idx / STEPS_PER_SIDE;  // 0,1,2,3
+            int pos     = idx % STEPS_PER_SIDE;  // 0 .. STEPS_PER_SIDE-1
+
+            double x, y;
+            switch (sideNum) {
+                case 0: // bottom: left→right
+                    x = centerX - halfSide + pos * STEP;
+                    y = centerY - halfSide;
+                    break;
+                case 1: // right: bottom→top
+                    x = centerX + halfSide;
+                    y = centerY - halfSide + pos * STEP;
+                    break;
+                case 2: // top: right→left
+                    x = centerX + halfSide - pos * STEP;
+                    y = centerY + halfSide;
+                    break;
+                case 3: // left: top→bottom
+                    x = centerX - halfSide;
+                    y = centerY + halfSide - pos * STEP;
+                    break;
+            }
+
+            go_to(leg, x, y);
+            stepCount++;
+        }
+    }
+}
+

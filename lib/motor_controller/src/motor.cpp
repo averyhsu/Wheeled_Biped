@@ -25,11 +25,11 @@ auto Motor::write(pvt command, int32_t value) ->void {
             break;
         case pos_abs:
             msg.buf[0] = 0xA4; // Absolute position command
-            val_to_array(dps, &msg.buf[2], 2); //store speed in bytes 2-4
+            val_to_array(dps, &msg.buf[2], 2); //store speed in bytes 2-3
             break;
         case pos_inc:
             msg.buf[0] = 0xA8; // Incremental position command
-            val_to_array(dps, &msg.buf[2], 2); //store speed in bytes 2-4
+            val_to_array(dps, &msg.buf[2], 2); //store speed in bytes 2-3
             break;
         case velocity:
             msg.buf[0] = 0xA2; // Velocity command
