@@ -1,3 +1,4 @@
+<!-- MAIN LAUNCH FILE -->
 <launch>
 
   <!-- these are the arguments you can pass this launch file, for example paused:=true -->
@@ -25,8 +26,6 @@
   <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen"
     args="-urdf -model wheeled_biped -param robot_description"/>
 
-  <!-- Launch the robot's controllers and state publishers -->
-  <include file="$(find simulation)/launch/robot_control.launch" />
 
   <!-- Launch RViz with the correct configuration -->
   <group if="$(arg rviz)">
