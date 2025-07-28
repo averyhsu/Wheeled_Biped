@@ -7,16 +7,16 @@ project(simulation)
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
-find_package(catkin REQUIRED)
 find_package(catkin REQUIRED COMPONENTS
   # Add packages you need to compile C++ code against here.
   # For example, if you were writing a C++ node that used controller_manager,
   # you would uncomment the line below. For now, it is not needed.
-  # controller_manager
-  #
+  controller_manager
+  joint_state_controller
+  robot_state_publisher
   # Other examples:
-  # roscpp
-  # std_msgs
+  roscpp
+  std_msgs
 )
 
 ## System dependencies are found with CMake's conventions
