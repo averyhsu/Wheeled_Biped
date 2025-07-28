@@ -1,3 +1,16 @@
 {
-    "cmake.sourceDirectory": "/home/averyhsu/projects/wheeled_biped/simulation_ws/src/simulation"
+    "cmake.sourceDirectory": "/home/averyhsu/projects/wheeled_biped/simulation_ws/src/simulation",
+    "ros.distro": "noetic",
+    "python.autoComplete.extraPaths": [
+        "/home/averyhsu/catkin_ws/devel/lib/python3/dist-packages",
+        "/home/averyhsu/ocs2_ws/devel/lib/python3/dist-packages",
+        "/opt/ros/noetic/lib/python3/dist-packages",
+        "/home/averyhsu/ocs2_ws/src/raisimLib/raisim/linux/lib"
+    ],
+    "python.analysis.extraPaths": [
+        "/home/averyhsu/catkin_ws/devel/lib/python3/dist-packages",
+        "/home/averyhsu/ocs2_ws/devel/lib/python3/dist-packages",
+        "/opt/ros/noetic/lib/python3/dist-packages",
+        "/home/averyhsu/ocs2_ws/src/raisimLib/raisim/linux/lib"
+    ]
 }

@@ -1,4 +1,3 @@
-<!-- MAIN LAUNCH FILE -->
 <launch>
 
   <!-- these are the arguments you can pass this launch file, for example paused:=true -->
@@ -28,6 +27,9 @@
 
   <!-- Launch the robot's controllers and state publishers -->
   <include file="$(find simulation)/launch/robot_control.launch" />
+
+  <!-- Launch the C++ test controller -->
+  <node name="simple_controller_node" pkg="robot_control" type="simple_controller_node" output="screen" />
 
   <!-- Launch RViz with the correct configuration -->
   <group if="$(arg rviz)">

@@ -1,2 +1,2 @@
-simulation
+robot_control:simulation
 -DCATKIN_DEVEL_PREFIX=/home/averyhsu/projects/wheeled_biped/simulation_ws/devel -DCMAKE_INSTALL_PREFIX=/home/averyhsu/projects/wheeled_biped/simulation_ws/install -G Unix Makefiles

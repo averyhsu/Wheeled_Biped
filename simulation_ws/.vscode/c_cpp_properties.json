@@ -1,0 +1,51 @@
+{
+  "configurations": [
+    {
+      "browse": {
+        "databaseFilename": "${default}",
+        "limitSymbolsToIncludedHeaders": false
+      },
+      "includePath": [
+        "/home/averyhsu/catkin_ws/devel/include/**",
+        "/home/averyhsu/ocs2_ws/devel/include/**",
+        "/opt/ros/noetic/include/**",
+        "/home/averyhsu/ocs2_ws/src/ocs2/ocs2_sqp/hpipm_catkin/include/**",
+        "/home/averyhsu/ocs2_ws/src/hpp-fcl/include/**",
+        "/home/averyhsu/ocs2_ws/src/leggedcontrol_go2/legged_common/include/**",
+        "/home/averyhsu/ocs2_ws/src/leggedcontrol_go2/legged_controllers/include/**",
+        "/home/averyhsu/ocs2_ws/src/leggedcontrol_go2/legged_estimation/include/**",
+        "/home/averyhsu/ocs2_ws/src/leggedcontrol_go2/legged_gazebo/include/**",
+        "/home/averyhsu/ocs2_ws/src/leggedcontrol_go2/legged_hw/include/**",
+        "/home/averyhsu/ocs2_ws/src/leggedcontrol_go2/legged_interface/include/**",
+        "/home/averyhsu/ocs2_ws/src/leggedcontrol_go2/legged_examples/legged_unitree/legged_unitree_hw/include/**",
+        "/home/averyhsu/ocs2_ws/src/leggedcontrol_go2/legged_wbc/include/**",
+        "/home/averyhsu/ocs2_ws/src/ocs2/ocs2_pinocchio/ocs2_centroidal_model/include/**",
+        "/home/averyhsu/ocs2_ws/src/ocs2/ocs2_core/include/**",
+        "/home/averyhsu/ocs2_ws/src/ocs2/ocs2_ddp/include/**",
+        "/home/averyhsu/ocs2_ws/src/ocs2/ocs2_ipm/include/**",
+        "/home/averyhsu/ocs2_ws/src/ocs2/ocs2_robotic_examples/ocs2_legged_robot/include/**",
+        "/home/averyhsu/ocs2_ws/src/ocs2/ocs2_robotic_examples/ocs2_legged_robot_ros/include/**",
+        "/home/averyhsu/ocs2_ws/src/ocs2/ocs2_mpc/include/**",
+        "/home/averyhsu/ocs2_ws/src/ocs2/ocs2_oc/include/**",
+        "/home/averyhsu/ocs2_ws/src/ocs2/ocs2_pinocchio/ocs2_pinocchio_interface/include/**",
+        "/home/averyhsu/ocs2_ws/src/ocs2/ocs2_test_tools/ocs2_qp_solver/include/**",
+        "/home/averyhsu/ocs2_ws/src/ocs2_robotic_assets/include/**",
+        "/home/averyhsu/ocs2_ws/src/ocs2/ocs2_robotic_tools/include/**",
+        "/home/averyhsu/ocs2_ws/src/ocs2/ocs2_ros_interfaces/include/**",
+        "/home/averyhsu/ocs2_ws/src/ocs2/ocs2_pinocchio/ocs2_self_collision/include/**",
+        "/home/averyhsu/ocs2_ws/src/ocs2/ocs2_pinocchio/ocs2_self_collision_visualization/include/**",
+        "/home/averyhsu/ocs2_ws/src/ocs2/ocs2_sqp/ocs2_sqp/include/**",
+        "/home/averyhsu/ocs2_ws/src/ocs2/ocs2_thirdparty/include/**",
+        "/home/averyhsu/catkin_ws/src/ros_essentials_cpp/include/**",
+        "/home/averyhsu/catkin_ws/src/ros_service_assignment/include/**",
+        "/usr/include/**"
+      ],
+      "name": "ROS",
+      "intelliSenseMode": "gcc-x64",
+      "compilerPath": "/usr/bin/gcc",
+      "cStandard": "gnu11",
+      "cppStandard": "c++14"
+    }
+  ],
+  "version": 4
+}
