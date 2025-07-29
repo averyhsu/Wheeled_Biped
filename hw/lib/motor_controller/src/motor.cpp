@@ -11,12 +11,13 @@
  * @param torque: 0.01 A
  *
  */
-auto Motor::write(pvt command, int32_t value) ->void {
+auto Motor::write(pvt command, int32_t value, int speed) ->void {
     // Implementation for writing motor commands
     CAN_message_t msg;
     msg.id = m_device;
     msg.len = 8; 
-    int32_t dps = rpm_to_dps(MAX_SPEED); 
+    int32_t dps = (int32_t)(rpm_to_dps(speed)/100.0); 
+    // 
 
     switch (command) {
         case stop:
@@ -168,7 +169,7 @@ auto Motor::write_pid(pid command, float value)->void{
     else {
         Serial.println("Error sending read PID message");
     }
-    delay(5);
+    delay(100);
 
 }
 

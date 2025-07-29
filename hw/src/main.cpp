@@ -12,6 +12,7 @@ Motor m3 (can1, 3);
 Leg l1 = {m1, m2};
 
 Motor TEST_MOTOR = m1;
+Motor motors[] = {m1, m2, m3};
 
 
 
@@ -26,7 +27,7 @@ void setup() {
 
     Serial.println("CAN bus initialized.");
     go_to(l1,32.4,0);
-    delay(300);
+    delay(500);
     m1.zero_encoder();
     m2.zero_encoder();
     // m3.zero_encoder();
@@ -42,60 +43,65 @@ void loop() {
 
 
     /*PID*/
+    // m1.write_pid(kp_pos, 0.025); //0.5
 
-    // TEST_MOTOR.read_pid(kp_pos);
-    // TEST_MOTOR.read_pid(ki_pos);
-    // TEST_MOTOR.read_pid(kd_pos);
+    // m1.write_pid(kd_pos, 20); //0.5
 
-    // TEST_MOTOR.write_pid(kp_pos, 0.1);//0.1
-    // delay(100);
-    // TEST_MOTOR.write_pid(ki_pos, 0.0); //0.001
-    // delay(100);
-    // TEST_MOTOR.write_pid(kd_pos, 60); //0.5
-    // delay(100);
+    for(int i =0; i<1; i++){
+        motors[i].read_pid(kp_pos);
+        motors[i].read_pid(ki_pos);
+        motors[i].read_pid(kd_pos);
 
-    // TEST_MOTOR.read_pid(kp_pos);
-    // TEST_MOTOR.read_pid(ki_pos);
-    // TEST_MOTOR.read_pid(kd_pos);
+        // motors[i].write_pid(kp_pos, 0.1);//0.1
+        // delay(100);
+        // motors[i].write_pid(ki_pos, 0.0); //0.001
+        // delay(100);
+        // motors[i].write_pid(kd_pos, 60); //0.5
+        // delay(100);
+
+        // motors[i].read_pid(kp_pos);
+        // motors[i].read_pid(ki_pos);
+        // motors[i].read_pid(kd_pos);
+    }
+    
     // delay(100);
 
  
     /*CHANGE ACCELERATION*/
+    for(int i =0; i<1; i++){
+        motors[i].read_accel(accel_pos);
+        motors[i].read_accel(decel_pos);
 
-    m1.write_accel(accel_pos, 40000);
-    delay(300);
-    m1.read_accel(accel_pos);
-    delay(100);
+    }
+    // m1.write_accel(accel_pos, 40000);
+    // delay(300);
+    // m1.read_accel(accel_pos);
+    // delay(100);
 
 
-    m2.write_accel(accel_pos, 40000);
-    delay(300);
-    m2.read_accel(accel_pos);
-    delay(100);
+    // m2.write_accel(accel_pos, 40000);
+    // delay(300);
+    // m2.read_accel(accel_pos);
+    // delay(100);
 
 
 
     /*TEST MOVE COMMANDS*/
 
-    // TEST_MOTOR.read_pos();
-    // delay(500);
-    // m1.write(stop);
-    // TEST_MOTOR.write(pos_abs, 2000);
-    // // rotate(TEST_MOTOR);
-    // delay(500);
-    // TEST_MOTOR.read_pos();
-    // delay(5000);
+        // m2.write(pos_abs, -9000, 100);
 
     /*REAL MOVE*/
-    double width =5;
-  
-    go_to(l1, 16-width, 0-width);
+    // rotate(m1, 45);
+
+    double width =7;
+    go_to(l1, 16+width, 0);
     delay(500);
-    for(int i =0; i<1;i++){
-        square(l1, width);
+    for(int i =0; i<5;i++){
+        circle(l1, width);
+
     }
 
-    // delay(10000);
+    // delay(6500);
     // m1.write(release);
     // m2.write(release);
     while(true);    

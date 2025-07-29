@@ -1,0 +1,11 @@
+{
+    "ros.distro": "noetic",
+    "python.autoComplete.extraPaths": [
+        "/opt/ros/noetic/lib/python3/dist-packages",
+        "/home/averyhsu/ocs2_ws/src/raisimLib/raisim/linux/lib"
+    ],
+    "python.analysis.extraPaths": [
+        "/opt/ros/noetic/lib/python3/dist-packages",
+        "/home/averyhsu/ocs2_ws/src/raisimLib/raisim/linux/lib"
+    ]
+}

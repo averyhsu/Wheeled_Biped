@@ -12,8 +12,8 @@
 
 inline constexpr int DEVICE_NUM = 3;
 inline constexpr uint32_t ALL = 0;
-inline constexpr int MAX_SPEED = 150; //805
-inline constexpr int MIN_SPEED = -805;//-805
+inline constexpr int MAX_SPEED = 500; //805
+inline constexpr int MIN_SPEED = -500;//-805
 inline constexpr uint32_t CMD_PERIOD_US = 1000;   // 1 kHz  (1000 µs)
 inline constexpr uint32_t INTERVAL=10; //active reply interval unit: 10 millisecond
 
@@ -62,15 +62,15 @@ class Motor{
             else{ return 0x140+device; }
         }
         
-        auto check_id()->int{
+        auto check_id()->uint32_t{
             return m_device-0x140+0x240; //check ID for reading
         }
 
         auto rpm_to_dps(int32_t rpm) -> int32_t{
-            int32_t res = (rpm/60);     //to rps
+            double res = (rpm/60.0);     //to rps
             res = res*360;              //to dps
             res = res*100;              //to 0.01 dps
-            return res;
+            return static_cast<int32_t>(res);
         }
 
         auto val_to_array(int32_t data, uint8_t* arr, int element=4) -> void{
@@ -133,7 +133,7 @@ class Motor{
          * @param velocity: rpm
          * @param torque: 0.01 A
          */
-        auto write(pvt command, int32_t value=0) -> void;
+        auto write(pvt command, int32_t value=0, int speed = MAX_SPEED) -> void;
 
         /**
          * @brief Read motor position.
