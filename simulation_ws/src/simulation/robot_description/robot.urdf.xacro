@@ -1,6 +1,7 @@
 <?xml version='1.0'?>
 <robot name="wheeled_biped" xmlns:xacro="http://www.ros.org/wiki/xacro">
 
+
     <!-- XACRO DEFINITIONS -->
 
     <material name="blue">
@@ -68,7 +69,8 @@
             <child  link="${side}_hip"/>
             <origin xyz="0 ${flip * length/2} 0" rpy="0 0 0"/>
             <axis xyz="0 1 0"/>
-            <limit lower="-2.53073" upper="2.53073" effort="3.8" velocity="60.0"/>
+            <limit lower="-3.14159" upper="3.14159" effort="3.8" velocity="60.0"/>
+
         </joint>
 
     </xacro:macro>
@@ -109,7 +111,8 @@
             <child  link="${side}_knee"/>
             <origin xyz="0 ${flip * 0.015} -0.175" rpy="0 0 0"/>
             <axis xyz="0 1 0"/>
-            <limit lower="-2.53073" upper="2.53073" effort="3.8" velocity="60.0"/>
+            <limit lower="-3.14159" upper="3.14159" effort="3.8" velocity="60.0"/>
+
         </joint>
     </xacro:macro>
     
@@ -139,6 +142,13 @@
                     <cylinder radius="0.06" length="0.0469"/>
                 </geometry>
             </visual>
+            <visual name="${side}_wheel_marker">
+                <origin xyz="0 0 0.06" rpy="0 0 0"/>
+                <geometry><box size="0.02 0.001 0.06"/></geometry>
+                <material name="red">
+                    <color rgba="1 0 0 1"/>
+                </material>
+            </visual>
         </link>
     </xacro:macro>
 
@@ -150,6 +160,7 @@
             <origin xyz="0 ${flip * 0.015/2} -0.175" rpy="0 0 0"/>
             <axis xyz="0 1 0"/>
             <limit effort="3.8" velocity="60.0"/>
+            <dynamics damping="0.005" friction="0"/>
         </joint>
     </xacro:macro>
 
@@ -179,6 +190,14 @@
         <visual name='visual'>
             <geometry>
                 <box size="${width} ${length} ${height}"/>
+            </geometry>
+        </visual>
+
+         <!-- Orientation indicator box -->
+        <visual name='orientation_indicator'>
+            <origin xyz="${width/4} 0 ${height/2 + 0.01}" rpy="0 0 0"/>
+            <geometry>
+                <box size="${width/4} ${length/8} 0.02"/>
             </geometry>
         </visual>
     </link>
@@ -232,6 +251,7 @@
         <origin xyz="0 0 0.02" rpy="0 0 0"/>
     </joint>
 
+    <!-- IMU sensor  -->
     <gazebo reference="imu_link">
         <sensor name="imu_sensor" type="imu">
             <always_on>true</always_on>
@@ -247,12 +267,14 @@
         </sensor>
     </gazebo>
 
+    <!-- Gazebo ros_control plugins for the robot -->
     <gazebo>
         <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
             <robotNamespace>/wheeled_biped</robotNamespace>
         </plugin>
     </gazebo>
 
+    <!-- Transmission: turn joints in actuators -->
     <xacro:macro name="transmission" params="joint">
         <transmission name="${joint}_transmission">
             <type>transmission_interface/SimpleTransmission</type>
@@ -274,10 +296,32 @@
     <xacro:transmission joint="right_knee_joint"/>
     <xacro:transmission joint="left_wheel_joint"/>
     <xacro:transmission joint="right_wheel_joint"/>
-    
-    
 
+    <!-- Gazebo friction parameters for the wheels -->
+   <xacro:macro name="friction" params="link">
+  <gazebo reference="${link}">
+    <max_contacts>20</max_contacts>      <!-- keep many points -->
+    <surface>
+      <friction>
+        <ode>
+          <mu>1.0</mu>   <mu2>1.0</mu2>
+          <slip1>0.02</slip1> <slip2>0.02</slip2>   <!-- tiny “give” -->
+        </ode>
+      </friction>
+    </surface>
+  </gazebo>
+</xacro:macro>
 
+<!-- 
+<xacro:friction link="left_wheel"/>
+<xacro:friction link="right_wheel"/>
+<xacro:friction link="left_knee"/>
+<xacro:friction link="right_knee"/>
+<xacro:friction link="left_hip"/>   
+<xacro:friction link="right_hip"/>
+<xacro:friction link="chassis"/> -->
+   
+ 
    
 </robot>
 

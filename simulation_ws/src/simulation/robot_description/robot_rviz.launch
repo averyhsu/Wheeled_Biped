@@ -1,3 +1,12 @@
+<!-- NOT NEEDED ANYMORE: initial Rviz test with fake joint_state_publisher
+
+1. joint_state_publisher[_gui] → publishes joint angles on /joint_states.
+
+2. robot_state_publisher → listens to /joint_states + URDF → publishes link transforms on /tf.
+
+3. RViz → subscribes to /tf and draws your robot accordingly.
+
+-->
 <launch>
 
   <arg name="model" default="$(find simulation)/robot_description/robot.urdf.xacro"/>
@@ -14,12 +23,3 @@
 
 </launch>
 
-<!-- 
-
-1. joint_state_publisher[_gui] → publishes joint angles on /joint_states.
-
-2. robot_state_publisher → listens to /joint_states + URDF → publishes link transforms on /tf.
-
-3. RViz → subscribes to /tf and draws your robot accordingly.
-
--->

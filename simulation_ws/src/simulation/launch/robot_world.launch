@@ -1,12 +1,28 @@
 <launch>
 
+
   <!-- these are the arguments you can pass this launch file, for example paused:=true -->
-  <arg name="paused" default="false"/>
+  <arg name="paused" default="true"/>
   <arg name="use_sim_time" default="true"/>
   <arg name="gui" default="true"/>
   <arg name="headless" default="false"/>
   <arg name="debug" default="false"/>
-  <arg name="rviz" default="true" />
+  <arg name="rviz" default="false" />
+
+ <!-- Add initial position arguments -->
+  <arg name="x" default="0"/>
+  <arg name="y" default="0"/>
+  <arg name="z" default="0.2"/>
+  <arg name="roll" default="0"/>
+  <arg name="pitch" default="-1.508"/>
+  <arg name="yaw" default="0"/>
+  <!-- Joint position arguments -->
+  <arg name="left_hip_pos" default="0"/>
+  <arg name="right_hip_pos" default="0"/>
+  <arg name="left_knee_pos" default="-2.1"/>
+  <arg name="right_knee_pos" default="-2.1"/>
+  <arg name="left_wheel_pos" default="0.0"/>
+  <arg name="right_wheel_pos" default="0.0"/>
 
   <!-- We resume the logic in empty_world.launch, changing only the name of the world to be launched -->
   <include file="$(find gazebo_ros)/launch/empty_world.launch">
@@ -23,7 +39,15 @@
 
   <!-- Run a python script to the send a service call to gazebo_ros to spawn a URDF robot -->
   <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen"
-    args="-urdf -model wheeled_biped -param robot_description"/>
+    args="-urdf -model wheeled_biped -param robot_description 
+          -x $(arg x) -y $(arg y) -z $(arg z) 
+          -R $(arg roll) -P $(arg pitch) -Y $(arg yaw)
+          -J left_hip_joint $(arg left_hip_pos)
+          -J right_hip_joint $(arg right_hip_pos)
+          -J left_knee_joint $(arg left_knee_pos)
+          -J right_knee_joint $(arg right_knee_pos)
+          -J left_wheel_joint $(arg left_wheel_pos)
+          -J right_wheel_joint $(arg right_wheel_pos)"/>
 
   <!-- Launch the robot's controllers and state publishers -->
   <include file="$(find simulation)/launch/robot_control.launch" />
