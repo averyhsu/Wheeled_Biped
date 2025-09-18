@@ -21,7 +21,6 @@ Motor motors[] = {m1, m2, m3};
 void setup() {
     Serial.begin(115200);
     while (!Serial);
-    
     can1.begin();
     can1.setBaudRate(1000000); // Set baud rate to 1Mbps(motor requirement)
 
