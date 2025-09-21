@@ -46,7 +46,7 @@ auto Motor::write(pvt command, int32_t value, int speed) ->void {
             break;
     }
 
-    val_to_array(value, &msg.buf[4]); //store position in bytes 4-7
+    val_to_array(value, &msg.buf[4]); //store value in bytes 4-7
     
     
     if (m_can.write(msg)) {

@@ -1,5 +1,5 @@
-//Outputs RPY of MPU 6050 with DMP to Serial in CSV format for Processign visualization
-//TODO: change it into a function that returns the RPY values
+//Outputs RPY of MPU 6050 with DMP to Serial in CSV format for Processing visualization
+
 
 #include "Wire.h"
 #include "MPU6050_6Axis_MotionApps20.h"

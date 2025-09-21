@@ -4,6 +4,8 @@
 #include "motor_controller/trajectory.hpp"
 // #include "motor_controller/kinematics.hpp"
 #include "motor_controller/motor.hpp"
+#include "Wire.h"
+
 
 FlexCAN_T4<CAN1, RX_SIZE_256, TX_SIZE_16> can1;
 Motor m1(can1, 1);
@@ -19,34 +21,38 @@ Motor motors[] = {m1, m2, m3};
 
 
 void setup() {
+    Wire.begin();              // Teensy 4.1: SDA=18, SCL=19
+    Wire.setClock(100000);     // keep conservative if wiring is long
     Serial.begin(115200);
     while (!Serial);
     can1.begin();
     can1.setBaudRate(1000000); // Set baud rate to 1Mbps(motor requirement)
 
     Serial.println("CAN bus initialized.");
-    go_to(l1,32.4,0);
-    delay(500);
-    m1.zero_encoder();
-    m2.zero_encoder();
-    // m3.zero_encoder();
+    // go_to(l1,32.4,0);
+    // delay(500);
+    // m1.zero_encoder();
+    // m2.zero_encoder();
+    m3.zero_encoder();
 
     // #ifdef DEBUG
     //     Serial.println("Debug mode is ON");
     //     motor_system::change_pid(can1);
 
     // #endif
+    
 }
 
 void loop() {
 
-
+    m3.write(stop, 60);
+    delay(100);
     /*PID*/
     // m1.write_pid(kp_pos, 0.025); //0.5
 
     // m1.write_pid(kd_pos, 20); //0.5
 
-    for(int i =0; i<1; i++){
+    for(int i =2; i<3; i++){
         motors[i].read_pid(kp_pos);
         motors[i].read_pid(ki_pos);
         motors[i].read_pid(kd_pos);
@@ -67,7 +73,7 @@ void loop() {
 
  
     /*CHANGE ACCELERATION*/
-    for(int i =0; i<1; i++){
+    for(int i =2; i<3; i++){
         motors[i].read_accel(accel_pos);
         motors[i].read_accel(decel_pos);
 
@@ -92,13 +98,13 @@ void loop() {
     /*REAL MOVE*/
     // rotate(m1, 45);
 
-    double width =7;
-    go_to(l1, 16+width, 0);
-    delay(500);
-    for(int i =0; i<5;i++){
-        circle(l1, width);
+    // double width =7;
+    // go_to(l1, 16+width, 0);
+    // delay(500);
+    // for(int i =0; i<5;i++){
+    //     circle(l1, width);
 
-    }
+    // }
 
     // delay(6500);
     // m1.write(release);
