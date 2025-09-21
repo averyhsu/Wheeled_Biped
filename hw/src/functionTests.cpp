@@ -1,48 +1,75 @@
-#include <Wire.h>
+#include "Wire.h"
+#include "MPU6050_6Axis_MotionApps20.h"
 
-#define MPU_ADDR 0x68
-#define PWR_MGMT_1 0x6B
+MPU6050 mpu(0x68);
+
+// --- DMP state ---
+bool     dmpReady   = false;
+uint8_t  devStatus  = 0;
+uint16_t packetSize = 0;
+uint16_t fifoCount  = 0;
+uint8_t  fifoBuffer[64];
+
+Quaternion   q;
+VectorFloat  gravity;
+float        ypr[3];   // library gives Yaw(Z), Pitch(Y), Roll(X)
+float        rpy[3];   // we'll reorder to Roll, Pitch, Yaw
 
 void setup() {
   Serial.begin(115200);
-  Wire.begin();
-  delay(1000);  // Give device time to boot
+  Wire.begin();              // Teensy 4.1: SDA=18, SCL=19
+  Wire.setClock(100000);     // keep conservative if wiring is long
+  delay(200);
 
-  Serial.println("🧪 Attempting soft reset of MPU6050...");
+  mpu.initialize();
+  devStatus = mpu.dmpInitialize();
 
-  // Write 0x80 to PWR_MGMT_1 to trigger reset
-  Wire.beginTransmission(MPU_ADDR);
-  Wire.write(PWR_MGMT_1);
-  Wire.write(0x80);  // Reset bit
-  byte result = Wire.endTransmission();
+  // (optional) quick offsets — tune later:
+  // mpu.setXAccelOffset(...); mpu.setYAccelOffset(...); mpu.setZAccelOffset(...);
+  // mpu.setXGyroOffset(...);  mpu.setYGyroOffset(...);  mpu.setZGyroOffset(...);
 
-  Serial.print("Soft reset result: ");
-  Serial.println(result);  // 0 = success, 2 = NACK on address, etc.
+  if (devStatus == 0) {
+    mpu.setDMPEnabled(true);
+    dmpReady   = true;
+    packetSize = mpu.dmpGetFIFOPacketSize();
 
-  // Optional: tell user what it means
-  switch (result) {
-    case 0:
-      Serial.println("✅ Reset command sent successfully.");
-      break;
-    case 1:
-      Serial.println("❌ Error 1: Data too long to fit in transmit buffer.");
-      break;
-    case 2:
-      Serial.println("❌ Error 2: Received NACK on transmit of address.");
-      break;
-    case 3:
-      Serial.println("❌ Error 3: Received NACK on transmit of data.");
-      break;
-    case 4:
-      Serial.println("❌ Error 4: Unknown error.");
-      break;
-    default:
-      Serial.println("❌ Unknown result code.");
-      break;
+    // (optional) lower the DMP output rate to make polling easy (e.g., ~50 Hz)
+    // mpu.setRate(19); // DMP base 200 Hz / (1 + Rate) -> 200/20 = 10 Hz (for some firmware)
+    // Note: setRate semantics can vary by firmware blob; if unsure, leave default.
+
+    Serial.println("DMP ready (polling FIFO, printing R,P,Y).");
+  } else {
+    Serial.print("DMP init failed, code = ");
+    Serial.println(devStatus);
+    while (1) {}
   }
 }
 
 void loop() {
-  // Nothing needed
-}
+  if (!dmpReady) return;
 
+  fifoCount = mpu.getFIFOCount();
+  if (fifoCount == 1024) {        // FIFO overflow
+    mpu.resetFIFO();
+    return;
+  }
+  if (fifoCount < packetSize) return;  // nothing new yet
+
+  // read exactly one packet
+  mpu.getFIFOBytes(fifoBuffer, packetSize);
+
+  // quaternion -> gravity -> YPR (yaw, pitch, roll)
+  mpu.dmpGetQuaternion(&q, fifoBuffer);
+  mpu.dmpGetGravity(&gravity, &q);
+  mpu.dmpGetYawPitchRoll(ypr, &q, &gravity);
+
+  // Reorder to RPY (roll, pitch, yaw), convert to degrees
+  rpy[0] =  ypr[2] * 180.0f / M_PI;  // Roll  (X)
+  rpy[1] =  ypr[1] * 180.0f / M_PI;  // Pitch (Y)
+  rpy[2] =  ypr[0] * 180.0f / M_PI;  // Yaw   (Z)
+
+  // Serial.print("RPY (deg): ");
+  Serial.print(rpy[0]); Serial.print(", ");
+  Serial.print(rpy[1]); Serial.print(", ");
+  Serial.println(rpy[2]);
+}
