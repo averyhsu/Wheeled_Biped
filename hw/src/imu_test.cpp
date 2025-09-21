@@ -1,5 +1,6 @@
 #include "Wire.h"
 #include "imu_class.hpp"
+
 IMU imu;
 
 void setup() {
