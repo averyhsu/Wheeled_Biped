@@ -1,0 +1,15 @@
+/home/averyhsu/projects/Wheeled_Biped/simulation_ws2/install/control/share/ament_index/resource_index/package_run_dependencies/control
+/home/averyhsu/projects/Wheeled_Biped/simulation_ws2/install/control/share/ament_index/resource_index/parent_prefix_path/control
+/home/averyhsu/projects/Wheeled_Biped/simulation_ws2/install/control/share/control/environment/ament_prefix_path.sh
+/home/averyhsu/projects/Wheeled_Biped/simulation_ws2/install/control/share/control/environment/ament_prefix_path.dsv
+/home/averyhsu/projects/Wheeled_Biped/simulation_ws2/install/control/share/control/environment/path.sh
+/home/averyhsu/projects/Wheeled_Biped/simulation_ws2/install/control/share/control/environment/path.dsv
+/home/averyhsu/projects/Wheeled_Biped/simulation_ws2/install/control/share/control/local_setup.bash
+/home/averyhsu/projects/Wheeled_Biped/simulation_ws2/install/control/share/control/local_setup.sh
+/home/averyhsu/projects/Wheeled_Biped/simulation_ws2/install/control/share/control/local_setup.zsh
+/home/averyhsu/projects/Wheeled_Biped/simulation_ws2/install/control/share/control/local_setup.dsv
+/home/averyhsu/projects/Wheeled_Biped/simulation_ws2/install/control/share/control/package.dsv
+/home/averyhsu/projects/Wheeled_Biped/simulation_ws2/install/control/share/ament_index/resource_index/packages/control
+/home/averyhsu/projects/Wheeled_Biped/simulation_ws2/install/control/share/control/cmake/controlConfig.cmake
+/home/averyhsu/projects/Wheeled_Biped/simulation_ws2/install/control/share/control/cmake/controlConfig-version.cmake
+/home/averyhsu/projects/Wheeled_Biped/simulation_ws2/install/control/share/control/package.xml

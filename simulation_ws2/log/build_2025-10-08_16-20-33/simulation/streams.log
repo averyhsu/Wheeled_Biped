@@ -1,0 +1,44 @@
+[0.006s] Invoking command in '/home/averyhsu/projects/Wheeled_Biped/simulation_ws2/build/simulation': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/averyhsu/16280/ros2_ws/install/turtlebot3_teleop:/home/averyhsu/16280/ros2_ws/install/turtlebot3_example:/home/averyhsu/16280/ros2_ws/install/tb3_yaw_fusion:/home/averyhsu/16280/ros2_ws/install/talker:/home/averyhsu/16280/ros2_ws/install/occupancy_map:/home/averyhsu/16280/ros2_ws/install/icp_package:/opt/ros/humble /usr/bin/cmake /home/averyhsu/projects/Wheeled_Biped/simulation_ws2/src/simulation -DCMAKE_INSTALL_PREFIX=/home/averyhsu/projects/Wheeled_Biped/simulation_ws2/install/simulation
+[0.086s] -- The C compiler identification is GNU 11.4.0
+[0.162s] -- The CXX compiler identification is GNU 11.4.0
+[0.169s] -- Detecting C compiler ABI info
+[0.223s] -- Detecting C compiler ABI info - done
+[0.228s] -- Check for working C compiler: /usr/bin/cc - skipped
+[0.228s] -- Detecting C compile features
+[0.229s] -- Detecting C compile features - done
+[0.231s] -- Detecting CXX compiler ABI info
+[0.288s] -- Detecting CXX compiler ABI info - done
+[0.293s] -- Check for working CXX compiler: /usr/bin/c++ - skipped
+[0.293s] -- Detecting CXX compile features
+[0.293s] -- Detecting CXX compile features - done
+[0.298s] -- Found ament_cmake: 1.3.12 (/opt/ros/humble/share/ament_cmake/cmake)
+[0.418s] -- Found Python3: /usr/bin/python3 (found version "3.10.12") found components: Interpreter 
+[0.497s] -- Found ament_lint_auto: 0.12.14 (/opt/ros/humble/share/ament_lint_auto/cmake)
+[0.557s] -- Added test 'flake8' to check Python code syntax and style conventions
+[0.557s] -- Added test 'lint_cmake' to check CMake code style
+[0.557s] -- Added test 'pep257' to check Python code against some of the docstring style conventions in PEP 257
+[0.558s] -- Added test 'xmllint' to check XML markup files
+[0.559s] -- Configuring done
+[0.561s] -- Generating done
+[0.562s] -- Build files have been written to: /home/averyhsu/projects/Wheeled_Biped/simulation_ws2/build/simulation
+[0.567s] Invoked command in '/home/averyhsu/projects/Wheeled_Biped/simulation_ws2/build/simulation' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/averyhsu/16280/ros2_ws/install/turtlebot3_teleop:/home/averyhsu/16280/ros2_ws/install/turtlebot3_example:/home/averyhsu/16280/ros2_ws/install/tb3_yaw_fusion:/home/averyhsu/16280/ros2_ws/install/talker:/home/averyhsu/16280/ros2_ws/install/occupancy_map:/home/averyhsu/16280/ros2_ws/install/icp_package:/opt/ros/humble /usr/bin/cmake /home/averyhsu/projects/Wheeled_Biped/simulation_ws2/src/simulation -DCMAKE_INSTALL_PREFIX=/home/averyhsu/projects/Wheeled_Biped/simulation_ws2/install/simulation
+[0.567s] Invoking command in '/home/averyhsu/projects/Wheeled_Biped/simulation_ws2/build/simulation': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/averyhsu/16280/ros2_ws/install/turtlebot3_teleop:/home/averyhsu/16280/ros2_ws/install/turtlebot3_example:/home/averyhsu/16280/ros2_ws/install/tb3_yaw_fusion:/home/averyhsu/16280/ros2_ws/install/talker:/home/averyhsu/16280/ros2_ws/install/occupancy_map:/home/averyhsu/16280/ros2_ws/install/icp_package:/opt/ros/humble /usr/bin/cmake --build /home/averyhsu/projects/Wheeled_Biped/simulation_ws2/build/simulation -- -j20 -l20
+[0.602s] Invoked command in '/home/averyhsu/projects/Wheeled_Biped/simulation_ws2/build/simulation' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/averyhsu/16280/ros2_ws/install/turtlebot3_teleop:/home/averyhsu/16280/ros2_ws/install/turtlebot3_example:/home/averyhsu/16280/ros2_ws/install/tb3_yaw_fusion:/home/averyhsu/16280/ros2_ws/install/talker:/home/averyhsu/16280/ros2_ws/install/occupancy_map:/home/averyhsu/16280/ros2_ws/install/icp_package:/opt/ros/humble /usr/bin/cmake --build /home/averyhsu/projects/Wheeled_Biped/simulation_ws2/build/simulation -- -j20 -l20
+[0.602s] Invoking command in '/home/averyhsu/projects/Wheeled_Biped/simulation_ws2/build/simulation': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/averyhsu/16280/ros2_ws/install/turtlebot3_teleop:/home/averyhsu/16280/ros2_ws/install/turtlebot3_example:/home/averyhsu/16280/ros2_ws/install/tb3_yaw_fusion:/home/averyhsu/16280/ros2_ws/install/talker:/home/averyhsu/16280/ros2_ws/install/occupancy_map:/home/averyhsu/16280/ros2_ws/install/icp_package:/opt/ros/humble /usr/bin/cmake --install /home/averyhsu/projects/Wheeled_Biped/simulation_ws2/build/simulation
+[0.607s] -- Install configuration: ""
+[0.607s] -- Installing: /home/averyhsu/projects/Wheeled_Biped/simulation_ws2/install/simulation/share/ament_index/resource_index/package_run_dependencies/simulation
+[0.607s] -- Installing: /home/averyhsu/projects/Wheeled_Biped/simulation_ws2/install/simulation/share/ament_index/resource_index/parent_prefix_path/simulation
+[0.607s] -- Installing: /home/averyhsu/projects/Wheeled_Biped/simulation_ws2/install/simulation/share/simulation/environment/ament_prefix_path.sh
+[0.607s] -- Installing: /home/averyhsu/projects/Wheeled_Biped/simulation_ws2/install/simulation/share/simulation/environment/ament_prefix_path.dsv
+[0.607s] -- Installing: /home/averyhsu/projects/Wheeled_Biped/simulation_ws2/install/simulation/share/simulation/environment/path.sh
+[0.607s] -- Installing: /home/averyhsu/projects/Wheeled_Biped/simulation_ws2/install/simulation/share/simulation/environment/path.dsv
+[0.607s] -- Installing: /home/averyhsu/projects/Wheeled_Biped/simulation_ws2/install/simulation/share/simulation/local_setup.bash
+[0.607s] -- Installing: /home/averyhsu/projects/Wheeled_Biped/simulation_ws2/install/simulation/share/simulation/local_setup.sh
+[0.607s] -- Installing: /home/averyhsu/projects/Wheeled_Biped/simulation_ws2/install/simulation/share/simulation/local_setup.zsh
+[0.607s] -- Installing: /home/averyhsu/projects/Wheeled_Biped/simulation_ws2/install/simulation/share/simulation/local_setup.dsv
+[0.607s] -- Installing: /home/averyhsu/projects/Wheeled_Biped/simulation_ws2/install/simulation/share/simulation/package.dsv
+[0.607s] -- Installing: /home/averyhsu/projects/Wheeled_Biped/simulation_ws2/install/simulation/share/ament_index/resource_index/packages/simulation
+[0.608s] -- Installing: /home/averyhsu/projects/Wheeled_Biped/simulation_ws2/install/simulation/share/simulation/cmake/simulationConfig.cmake
+[0.608s] -- Installing: /home/averyhsu/projects/Wheeled_Biped/simulation_ws2/install/simulation/share/simulation/cmake/simulationConfig-version.cmake
+[0.608s] -- Installing: /home/averyhsu/projects/Wheeled_Biped/simulation_ws2/install/simulation/share/simulation/package.xml
+[0.619s] Invoked command in '/home/averyhsu/projects/Wheeled_Biped/simulation_ws2/build/simulation' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/averyhsu/16280/ros2_ws/install/turtlebot3_teleop:/home/averyhsu/16280/ros2_ws/install/turtlebot3_example:/home/averyhsu/16280/ros2_ws/install/tb3_yaw_fusion:/home/averyhsu/16280/ros2_ws/install/talker:/home/averyhsu/16280/ros2_ws/install/occupancy_map:/home/averyhsu/16280/ros2_ws/install/icp_package:/opt/ros/humble /usr/bin/cmake --install /home/averyhsu/projects/Wheeled_Biped/simulation_ws2/build/simulation
