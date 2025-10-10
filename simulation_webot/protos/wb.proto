@@ -32,6 +32,8 @@ PROTO wb [
       Solid {
 
         children [
+          # IMU
+          # InertialUnit { name "imu" }
           Shape {
             appearance PBRAppearance {
               baseColor 0.500000 0.500000 0.500000
@@ -57,6 +59,8 @@ PROTO wb [
               }
             ]
           }
+
+            
           # --- LEFT LEG ---
 
           # --- LEFT HIP JOINT ---
@@ -433,7 +437,7 @@ PROTO wb [
     
     physics Physics {
           density -1
-          mass 1.700000
+          mass 0.1
      }
     name IS name
   }
