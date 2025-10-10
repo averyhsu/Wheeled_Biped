@@ -1,0 +1,40 @@
+#VRML_SIM R2025a utf8
+
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/backgrounds/protos/TexturedBackground.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/backgrounds/protos/TexturedBackgroundLight.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/floors/protos/RectangleArena.proto"
+EXTERNPROTO "../protos/wb.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/balls/protos/Ball.proto"
+
+WorldInfo {
+}
+Viewpoint {
+  orientation 0.03970475806404536 -0.05377654189075713 -0.9977633064656906 5.009000376144088
+  position -0.9216436697722342 -5.83814301176402 0.5271614393987584
+}
+TexturedBackground {
+}
+TexturedBackgroundLight {
+}
+RectangleArena {
+  floorSize 3 3
+}
+wb {
+  hidden translation_1 6.991872667456538e-11 1.3503803827924161e-20 -6.899421590733645e-05
+  hidden rotation_1 -1.0973783390654038e-05 -0.9999999999397878 -2.2722509840758822e-08 2.2501049063942242e-11
+  hidden position_1_0 6.654131053155067e-07
+  hidden position_1_1 6.654131040342171e-07
+  hidden rotation_2 0 1 0 6.657334537413353e-07
+  hidden position_2_0 3.439384117583636e-07
+  hidden rotation_3 0 1 0 3.4369714840265545e-07
+  hidden position_3_0 2.6059558653844484e-07
+  hidden rotation_4 0 1 0 2.598106231415675e-07
+  hidden rotation_5 0 1 0 6.657334537413353e-07
+  hidden position_5_0 3.439384121443692e-07
+  hidden rotation_6 0 1 0 3.4369714840265545e-07
+  hidden position_6_0 2.60595586577742e-07
+  hidden rotation_7 0 1 0 2.598106231415675e-07
+}
+Ball {
+  translation 0 0 0.032412542921696014
+}

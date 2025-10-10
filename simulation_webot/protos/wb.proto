@@ -1,0 +1,440 @@
+#VRML_SIM R2025a utf8
+# license: Apache License 2.0
+# license url: http://www.apache.org/licenses/LICENSE-2.0
+# This is a proto file for Webots for the wb
+# Extracted from: /home/averyhsu/projects/Wheeled_Biped/simulation_webot/protos/wb.urdf
+
+PROTO wb [
+  field  SFVec3f     translation     0 0 1
+  field  SFRotation  rotation        0 0 1 0
+  field  SFString    name            "wb"  # Is `Robot.name`.
+  # field  SFString    controller      "void" # Is `Robot.controller`.
+  field  MFString    controllerArgs  []     # Is `Robot.controllerArgs`.
+  field  SFString    customData      ""     # Is `Robot.customData`.
+  field  SFBool      supervisor      FALSE  # Is `Robot.supervisor`.
+  field  SFBool      synchronization FALSE   # Is `Robot.synchronization`.
+  field  SFBool      selfCollision   FALSE  # Is `Robot.selfCollision`.
+]
+{
+  Robot {
+    translation IS translation
+    rotation IS rotation
+    # controller IS controller
+    controllerArgs IS controllerArgs
+    customData IS customData
+    supervisor IS supervisor
+    synchronization IS synchronization
+    selfCollision IS selfCollision
+    # The 'children' array defines the robot's structure, starting with the root link.
+    children [
+      # --- CHASSIS LINK ---
+      # This is the root Solid node, representing the 'chassis' link.
+      Solid {
+
+        children [
+          Shape {
+            appearance PBRAppearance {
+              baseColor 0.500000 0.500000 0.500000
+              roughness 1.000000
+              metalness 0
+            }
+            geometry Box {
+               size 0.100000 0.150000 0.100000
+            }
+          }
+          Pose {
+            translation 0.025000 0.000000 0.060000
+            children [
+              Shape {
+                appearance PBRAppearance {
+                  baseColor 0.500000 0.500000 0.500000
+                  roughness 1.000000
+                  metalness 0
+                }
+                geometry Box {
+                   size 0.025000 0.018750 0.020000
+                }
+              }
+            ]
+          }
+          # --- LEFT LEG ---
+
+          # --- LEFT HIP JOINT ---
+          HingeJoint {
+            jointParameters HingeJointParameters {
+              axis 0.000000 1.000000 0.000000
+              anchor 0.000000 -0.075000 0.000000
+            }
+            device [
+              RotationalMotor {
+                name "left_hip_joint"
+                maxVelocity 60.0
+                minPosition -3.14159
+                maxPosition 3.14159
+                maxTorque 3.8
+              }
+              PositionSensor {
+                name "left_hip_joint_sensor"
+              }
+            ]
+            # --- LEFT HIP LINK ---
+            # The endPoint of a joint is the Solid (link) it connects to.
+            endPoint Solid {
+              translation 0.000000 -0.075000 0.000000
+              children [
+                Pose {
+                  translation 0.000000 -0.015000 -0.087500
+                  children [
+                    Shape {
+                      appearance PBRAppearance {
+                        baseColor 0.500000 0.500000 0.500000
+                        roughness 1.000000
+                        metalness 0
+                      }
+                      geometry Box {
+                         size 0.060000 0.030000 0.175000
+                      }
+                    }
+                  ]
+                }
+                # --- LEFT KNEE JOINT ---
+                HingeJoint {
+                  jointParameters HingeJointParameters {
+                    axis 0.000000 1.000000 0.000000
+                    anchor 0.000000 -0.015000 -0.175000
+                  }
+                  device [
+                    RotationalMotor {
+                      name "left_knee_joint"
+                      maxVelocity 60.0
+                      minPosition -3.14159
+                      maxPosition 3.14159
+                      maxTorque 3.8
+                    }
+                    PositionSensor {
+                      name "left_knee_joint_sensor"
+                    }
+                  ]
+                  # --- LEFT KNEE LINK ---
+                  # This Solid represents the 'left_knee' link.
+                  endPoint Solid {
+                    translation 0.000000 -0.015000 -0.175000
+                    children [
+                      Pose {
+                        translation 0.000000 0.000000 -0.087500
+                        children [
+                          Shape {
+                            appearance PBRAppearance {
+                              baseColor 0.500000 0.500000 0.500000
+                              roughness 1.000000
+                              metalness 0
+                            }
+                            geometry Box {
+                               size 0.031000 0.015000 0.175000
+                            }
+                          }
+                        ]
+                      }
+                      # --- LEFT WHEEL JOINT ---
+                      HingeJoint {
+                        jointParameters HingeJointParameters {
+                          axis 0.000000 1.000000 0.000000
+                          anchor 0.000000 -0.007500 -0.175000
+                          dampingConstant 0.005
+                        }
+                        device [
+                          RotationalMotor {
+                            name "left_wheel_joint"
+                            maxVelocity 60.0
+                            maxTorque 3.8
+                          }
+                          PositionSensor {
+                            name "left_wheel_joint_sensor"
+                          }
+                        ]
+                        # --- LEFT WHEEL LINK ---
+                        # This Solid represents the 'left_wheel' link.
+                        endPoint Solid {
+                          translation 0.000000 -0.007500 -0.175000
+                          children [
+                            Pose {
+                              translation 0.000000 -0.023450 0.000000
+                              rotation 1.000000 0.000000 0.000000 1.570800
+                              children [
+                                Shape {
+                                  appearance PBRAppearance {
+                                    baseColor 0.500000 0.500000 0.500000
+                                    roughness 1.000000
+                                    metalness 0
+                                  }
+                                  geometry Cylinder {
+                                    radius 0.06
+                                    height 0.0469
+                                  }
+                                }
+                              ]
+                            }
+                            Pose {
+                              translation 0.000000 0.000000 0.060000
+                              children [
+                                Shape {
+                                  appearance DEF red PBRAppearance {
+                                    baseColor 1.000000 0.000000 0.000000
+                                    roughness 1.000000
+                                    metalness 0
+                                  }
+                                  geometry Box {
+                                     size 0.020000 0.001000 0.060000
+                                  }
+                                }
+                              ]
+                            }
+                          ]
+                          name "left_wheel"
+                          boundingObject Pose {
+                            translation 0.000000 -0.023450 0.000000
+                            rotation 1.000000 0.000000 0.000000 1.570800
+                            children [
+                              Cylinder {
+                                radius 0.06
+                                height 0.0469
+                              }
+                            ]
+                          }
+                          physics Physics {
+                            density -1
+                            mass 0.700000
+                          }
+                        }
+                      }
+                    ]
+                    name "left_knee"
+                    boundingObject Pose {
+                      translation 0.000000 0.000000 -0.087500
+                      children [
+                        Box {
+                           size 0.031000 0.015000 0.175000
+                        }
+                      ]
+                    }
+                    physics Physics {
+                      density -1
+                      mass 0.50000
+                    }
+                  }
+                }
+              ]
+              name "left_hip"
+              boundingObject Pose {
+                translation 0.000000 -0.015000 -0.087500
+                children [
+                  Box {
+                     size 0.060000 0.030000 0.175000
+                  }
+                ]
+              }
+              physics Physics {
+                density -1
+                mass 0.150000
+              }
+            }
+          }
+          # --- RIGHT LEG ---
+
+          # --- RIGHT HIP JOINT ---
+          HingeJoint {
+            jointParameters HingeJointParameters {
+              axis 0.000000 1.000000 0.000000
+              anchor 0.000000 0.075000 0.000000
+            }
+            device [
+              RotationalMotor {
+                name "right_hip_joint"
+                maxVelocity 60.0
+                minPosition -3.14159
+                maxPosition 3.14159
+                maxTorque 3.8
+              }
+              PositionSensor {
+                name "right_hip_joint_sensor"
+              }
+            ]
+            # --- RIGHT HIP LINK ---
+            # This Solid represents the 'right_hip' link.
+            endPoint Solid {
+              translation 0.000000 0.075000 0.000000
+              children [
+                Pose {
+                  translation 0.000000 0.015000 -0.087500
+                  children [
+                    Shape {
+                      appearance PBRAppearance {
+                        baseColor 0.500000 0.500000 0.500000
+                        roughness 1.000000
+                        metalness 0
+                      }
+                      geometry Box {
+                         size 0.060000 0.030000 0.175000
+                      }
+                    }
+                  ]
+                }
+                # --- RIGHT KNEE JOINT ---
+                HingeJoint {
+                  jointParameters HingeJointParameters {
+                    axis 0.000000 1.000000 0.000000
+                    anchor 0.000000 0.015000 -0.175000
+                  }
+                  device [
+                    RotationalMotor {
+                      name "right_knee_joint"
+                      maxVelocity 60.0
+                      minPosition -3.14159
+                      maxPosition 3.14159
+                      maxTorque 3.8
+                    }
+                    PositionSensor {
+                      name "right_knee_joint_sensor"
+                    }
+                  ]
+                  # --- RIGHT KNEE LINK ---
+                  # This Solid represents the 'right_knee' link.
+                  endPoint Solid {
+                    translation 0.000000 0.015000 -0.175000
+                    children [
+                      Pose {
+                        translation 0.000000 0.000000 -0.087500
+                        children [
+                          Shape {
+                            appearance PBRAppearance {
+                              baseColor 0.500000 0.500000 0.500000
+                              roughness 1.000000
+                              metalness 0
+                            }
+                            geometry Box {
+                               size 0.031000 0.015000 0.175000
+                            }
+                          }
+                        ]
+                      }
+                      # --- RIGHT WHEEL JOINT ---
+                      HingeJoint {
+                        jointParameters HingeJointParameters {
+                          axis 0.000000 1.000000 0.000000
+                          anchor 0.000000 0.007500 -0.175000
+                          dampingConstant 0.005
+                        }
+                        device [
+                          RotationalMotor {
+                            name "right_wheel_joint"
+                            maxVelocity 60.0
+                            maxTorque 3.8
+                          }
+                          PositionSensor {
+                            name "right_wheel_joint_sensor"
+                          }
+                        ]
+                        # --- RIGHT WHEEL LINK ---
+                        # This Solid represents the 'right_wheel' link.
+                        endPoint Solid {
+                          translation 0.000000 0.007500 -0.175000
+                          children [
+                            Pose {
+                              translation 0.000000 0.023450 0.000000
+                              rotation 1.000000 0.000000 0.000000 1.570800
+                              children [
+                                Shape {
+                                  appearance PBRAppearance {
+                                    baseColor 0.500000 0.500000 0.500000
+                                    roughness 1.000000
+                                    metalness 0
+                                  }
+                                  geometry Cylinder {
+                                    radius 0.06
+                                    height 0.0469
+                                  }
+                                }
+                              ]
+                            }
+                            Pose {
+                              translation 0.000000 0.000000 0.060000
+                              children [
+                                Shape {
+                                  appearance USE red
+                                  geometry Box {
+                                     size 0.020000 0.001000 0.060000
+                                  }
+                                }
+                              ]
+                            }
+                          ]
+                          name "right_wheel"
+                          boundingObject Pose {
+                            translation 0.000000 0.023450 0.000000
+                            rotation 1.000000 0.000000 0.000000 1.570800
+                            children [
+                              Cylinder {
+                                radius 0.06
+                                height 0.0469
+                              }
+                            ]
+                          }
+                          physics Physics {
+                            density -1
+                            mass 0.700000
+                          }
+                        }
+                      }
+                    ]
+                    name "right_knee"
+                    boundingObject Pose {
+                      translation 0.000000 0.000000 -0.087500
+                      children [
+                        Box {
+                           size 0.031000 0.015000 0.175000
+                        }
+                      ]
+                    }
+                    physics Physics {
+                      density -1
+                      mass 0.50000
+                    }
+                  }
+                }
+              ]
+              name "right_hip"
+              boundingObject Pose {
+                translation 0.000000 0.015000 -0.087500
+                children [
+                  Box {
+                     size 0.060000 0.030000 0.175000
+                  }
+                ]
+              }
+              physics Physics {
+                density -1
+                mass 0.150000
+              }
+            }
+          }
+        ]
+        name "chassis"
+        boundingObject Box {
+           size 0.100000 0.150000 0.100000
+        }
+        physics Physics {
+          density -1
+          mass 1.700000
+        }
+      }
+    ]
+    boundingObject Box {
+           size 0.100000 0.150000 0.100000}
+    
+    physics Physics {
+          density -1
+          mass 1.700000
+     }
+    name IS name
+  }
+}

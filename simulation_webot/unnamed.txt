@@ -1,0 +1,11 @@
+Robot {
+  translation 0 0.3 0
+  synchronization FALSE
+  children [
+    Solid {
+      children [ Shape { geometry Box { size 0.2 0.1 0.08 } } ]
+      boundingObject Box { size 0.2 0.1 0.08 }
+      physics Physics { mass 2 }
+    }
+  ]
+}

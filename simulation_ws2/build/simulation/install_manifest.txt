@@ -1,4 +1,5 @@
-/home/averyhsu/projects/Wheeled_Biped/simulation_ws2/install/simulation/share/simulation/launch/robot_launch.py
+/home/averyhsu/projects/Wheeled_Biped/simulation_ws2/install/simulation/share/simulation/launch/gazebo_launch.py
+/home/averyhsu/projects/Wheeled_Biped/simulation_ws2/install/simulation/share/simulation/launch/rviz_launch.py
 /home/averyhsu/projects/Wheeled_Biped/simulation_ws2/install/simulation/share/simulation/robot_description/robot.urdf.xacro
 /home/averyhsu/projects/Wheeled_Biped/simulation_ws2/install/simulation/share/simulation/config/robot.rviz
 /home/averyhsu/projects/Wheeled_Biped/simulation_ws2/install/simulation/share/ament_index/resource_index/package_run_dependencies/simulation
