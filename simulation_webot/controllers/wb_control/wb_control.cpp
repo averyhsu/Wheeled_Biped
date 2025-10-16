@@ -8,9 +8,9 @@
 
 const double PI = 3.14159265358979323846;
 
-double Kp1 = 8; // Proportional gain
-double Ki1 = 0.5; // Integral gain
-double Kd1 = 5; // Derivative gain
+double Kp1 = 7; // Proportional gain
+double Ki1 = 0.9; // Integral gain
+double Kd1 = 6; // Derivative gain
 double scale_factor1 = 5.0;
 PIDController pid1(Kp1, Ki1, Kd1); //Kp, Ki, Kd
 
@@ -48,26 +48,35 @@ int main() {
   
   
   //Begin control
-
+  //Zero everything
   right_knee->setPosition(0);
   left_knee->setPosition(0);
   right_wheel->setVelocity(0);
   left_wheel->setVelocity(0);
+  
+  //Initialize variable 
+    double right_vel = 0;
+    double left_vel = 0;
+    double cur_vel  = 0;
+    double e_vel = 0;
+    double target_theta = 0;
+
+    const double *rpy = NULL;
+    double output =0;
 
   
 
-  //size 3 aeray: r:p:y
   while (robot->step(TIME_STEP) != -1)
   {
 
     /*------PID #2 wheel velocity -> target pitch-------*/
-    double right_vel = right_wheel->getVelocity();
-    double left_vel = left_wheel->getVelocity();
-    double cur_vel  = (right_vel+left_vel)/2.0;
-    double e_vel = cur_vel-0.0;
+    right_vel = right_wheel->getVelocity();
+    left_vel = left_wheel->getVelocity();
+    cur_vel  = (right_vel+left_vel)/2.0;
+    e_vel = cur_vel-0.0;
     std::cout << "cur_vel: " << cur_vel << std::endl;
 
-    double target_theta = -1*std::clamp(scale_factor2*pid2.calculateControlSignal(0, e_vel),-PI/2, PI/2);
+    target_theta = -1*std::clamp(scale_factor2*pid2.calculateControlSignal(0, e_vel),-PI/2, PI/2);
     std::cout << "Target Theta: " << target_theta*180.0/PI << std::endl;
 
 
@@ -76,11 +85,11 @@ int main() {
    
     /*------PID #1 INPUT -> OUTPUT: pitch -> wheel velocity-------*/
     //API outputs in radians
-    const double *rpy = imu->getRollPitchYaw();  
+    rpy = imu->getRollPitchYaw();  
     std::cout << "Pitch: " << rpy[1]*180.0/PI <<"\n"<<"\n"<< std::endl;
     std::cout << ""<<std::endl;
 
-    double output = scale_factor1*pid1.calculateControlSignal(target_theta, rpy[1]);
+    output = scale_factor1*pid1.calculateControlSignal(target_theta, rpy[1]);
     std::cout << "Output: " << output<< std::endl;
     right_wheel->setVelocity(output);
     left_wheel->setVelocity(output);
