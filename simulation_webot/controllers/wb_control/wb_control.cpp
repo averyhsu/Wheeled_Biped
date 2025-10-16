@@ -7,23 +7,32 @@
 #include <algorithm>
 
 const double PI = 3.14159265358979323846;
+const double BENT = 0;
+const double target_vel = 0;
 
-double Kp1 = 7; // Proportional gain
-double Ki1 = 0.9; // Integral gain
-double Kd1 = 6; // Derivative gain
+double Kp1 = 7;
+; // Proportional gain 7
+double Ki1 = 0.9; // Integral gain 0.9
+double Kd1 = 6; // Derivative gain 6
 double scale_factor1 = 5.0;
 PIDController pid1(Kp1, Ki1, Kd1); //Kp, Ki, Kd
 
-double Kp2 = 0.02; // Proportional gain
-double Ki2 = 0; // Integral gain
-double Kd2 = 0.001; // Derivative gain
-double scale_factor2 = 1;
+double Kp2 = 1.9
+; // Proportional gain
+double Ki2 = 0.04; // Integral gain
+double Kd2 = 0.09; // Derivative gain
+double scale_factor2 = 0.01;
 PIDController pid2(Kp2, Ki2, Kd2); //Kp, Ki, Kd
 
 //time step in milliseconds
 int TIME_STEP = 1;
 
 using namespace webots;
+
+double deg_to_rad(double deg){
+  return deg*PI/180;
+}
+
 
 int main() {
 
@@ -49,20 +58,23 @@ int main() {
   
   //Begin control
   //Zero everything
-  right_knee->setPosition(0);
-  left_knee->setPosition(0);
+  right_hip->setPosition(deg_to_rad(-BENT));
+  left_hip->setPosition(deg_to_rad(-BENT));
+  right_knee->setPosition(deg_to_rad(2*BENT));
+  left_knee->setPosition(deg_to_rad(2*BENT));
+
   right_wheel->setVelocity(0);
   left_wheel->setVelocity(0);
   
-  //Initialize variable 
-    double right_vel = 0;
-    double left_vel = 0;
-    double cur_vel  = 0;
-    double e_vel = 0;
-    double target_theta = 0;
+//Initialize variable 
+  double right_vel = 0;
+  double left_vel = 0;
+  double cur_vel  = 0;
+  double e_vel = 0;
+  double target_theta = 0;
 
-    const double *rpy = NULL;
-    double output =0;
+  const double *rpy = NULL;
+  double output =0;
 
   
 
@@ -76,11 +88,8 @@ int main() {
     e_vel = cur_vel-0.0;
     std::cout << "cur_vel: " << cur_vel << std::endl;
 
-    target_theta = -1*std::clamp(scale_factor2*pid2.calculateControlSignal(0, e_vel),-PI/2, PI/2);
+    target_theta = -1*std::clamp(scale_factor2*pid2.calculateControlSignal(target_vel, e_vel),-PI/2, PI/2);
     std::cout << "Target Theta: " << target_theta*180.0/PI << std::endl;
-
-
-
     /*------PID #2 END-------*/
    
     /*------PID #1 INPUT -> OUTPUT: pitch -> wheel velocity-------*/
@@ -89,7 +98,7 @@ int main() {
     std::cout << "Pitch: " << rpy[1]*180.0/PI <<"\n"<<"\n"<< std::endl;
     std::cout << ""<<std::endl;
 
-    output = scale_factor1*pid1.calculateControlSignal(target_theta, rpy[1]);
+    output = std::clamp(scale_factor1*pid1.calculateControlSignal(target_theta, rpy[1]),-60.0, 60.0);
     std::cout << "Output: " << output<< std::endl;
     right_wheel->setVelocity(output);
     left_wheel->setVelocity(output);
