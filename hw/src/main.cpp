@@ -7,7 +7,7 @@
 #include "Wire.h"
 
 
-FlexCAN_T4<CAN1, RX_SIZE_256, TX_SIZE_16> can1;
+FlexCAN_T4<CAN1, RX_SIZE_256, TX_SIZE_32> can1;
 Motor m1(can1, 1);
 Motor m2(can1, 2);
 Motor m3 (can1, 3);

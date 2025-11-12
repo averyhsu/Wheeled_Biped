@@ -22,7 +22,7 @@ inline constexpr uint32_t TORQUE_FREQ = 70 ;//70 microseconds: 15KHZ every 0.066
 inline constexpr uint32_t SPEED_FREQ = 200; //200 microseconds: 5KHZ every 0.2 ms = 200 microseconds
 inline constexpr uint32_t POS_FREQ = 1000; //1000 microseconds: 1KHZ = every 1 ms =1000 microseconds
 
-using FlexCAN =  FlexCAN_T4<CAN1, RX_SIZE_256, TX_SIZE_16>&; //reference value to create adiitional copies
+using FlexCAN =  FlexCAN_T4<CAN1, RX_SIZE_256, TX_SIZE_32>&; //reference value to create adiitional copies
 enum accel{
     accel_pos=0,
     decel_pos= 1,

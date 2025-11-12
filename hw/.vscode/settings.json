@@ -48,5 +48,6 @@
         "cinttypes": "cpp",
         "typeinfo": "cpp",
         "*.tpp": "cpp"
-    }
+    },
+    "ros.distro": "humble"
 }

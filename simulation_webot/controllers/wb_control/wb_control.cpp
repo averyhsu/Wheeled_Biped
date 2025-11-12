@@ -7,7 +7,7 @@
 #include <algorithm>
 
 const double PI = 3.14159265358979323846;
-const double BENT = 0;
+const double BENT = 20;
 const double target_vel = 0;
 
 double Kp1 = 7;
