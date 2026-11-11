@@ -1,6 +1,6 @@
 # Wheeled Biped
 
-A two-legged robot with a wheel at the end of each leg: it balances like an inverted pendulum on its wheels and uses its legs to change height. This repo holds the simulation (Webots, ROS 1 and ROS 2 robot descriptions) and the Teensy 4.1 firmware that drives the real motors over CAN bus. All of it is C++ and written from scratch.
+A two-legged robot with a wheel at the end of each leg: it balances like an inverted pendulum on its wheels and uses its legs to change height. This repo holds the simulation (Webots, ROS 1 and ROS 2 robot descriptions) and the Teensy 4.1 firmware that drives the real motors over CAN bus. The control code is C++, written from scratch.
 
 <p align="center">
   <img src="docs/media/webots_balance.jpg" width="560" alt="Wheeled biped balancing in the Webots simulation">
